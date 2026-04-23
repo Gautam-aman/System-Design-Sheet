@@ -40,24 +40,7 @@
 - **Zero setup** — single `.html` file, works offline, no install needed
 - **LocalStorage persistence** — progress and custom links saved in your browser
 
----
 
-## 🚀 Run Locally
-
-```bash
-git clone https://github.com/YOUR_USERNAME/sysdesign-track.git
-cd sysdesign-track
-
-# Just open the file — no server needed
-open system-design-tracker.html        # macOS
-start system-design-tracker.html       # Windows
-xdg-open system-design-tracker.html   # Linux
-```
-
-Or deploy your own in seconds:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Gautam-aman/sysdesign-track)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Gautam-aman/sysdesign-track)
 
 ---
 
@@ -176,11 +159,6 @@ git commit -m "feat: add service mesh and saga pattern topics"
 git push origin feature/add-new-topics
 ```
 
----
-
-## 📄 License
-
-MIT License — free to use, share, and modify.
 
 ---
 
