@@ -3,1534 +3,1724 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SysDesign.track — Interview Prep Dashboard</title>
+<title>SysDesign.track — Beginner to Advanced</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg: #040404;
-    --bg2: #080808;
-    --bg3: #0c0c0c;
-    --surface: #101010;
-    --surface2: #161616;
-    --surface3: #1e1e1e;
-    --green: #3ddc84;
-    --green2: #2bbd6e;
-    --green3: #1a7a48;
-    --green-dim: rgba(61,220,132,0.07);
-    --green-glow: 0 0 24px rgba(61,220,132,0.15);
-    --amber: #f5a623;
-    --amber-dim: rgba(245,166,35,0.08);
-    --red: #f06565;
-    --red-dim: rgba(240,101,101,0.08);
-    --blue: #6eb5ff;
-    --blue-dim: rgba(110,181,255,0.08);
-    --text: #d4d4d4;
-    --text2: #7a7a7a;
-    --text3: #444444;
-    --border: #181818;
-    --border2: #242424;
-    --sans: 'Inter', sans-serif;
-    --display: 'Outfit', sans-serif;
-    --radius: 8px;
-    --radius-sm: 5px;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 13px;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Header */
-  .header {
-    border-bottom: 1px solid var(--border);
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(8,8,8,0.92);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(16px);
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-  }
-
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: var(--green-dim);
-    border: 1px solid rgba(61,220,132,0.2);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-  }
-
-  .logo-text {
-    font-family: var(--display);
-    font-size: 17px;
-    font-weight: 600;
-    color: #e8e8e8;
-    letter-spacing: -0.3px;
-  }
-
-  .logo-text span { color: var(--green); }
-
-  .logo-sub {
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 1px;
-    margin-top: 1px;
-  }
-
-  .header-stats {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .stat-pill {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 20px;
-    padding: 5px 13px;
-    font-size: 11px;
-    color: var(--text2);
-    font-family: var(--sans);
-    font-weight: 400;
-    transition: border-color 0.2s;
-  }
-
-  .stat-pill:hover { border-color: var(--border2); }
-
-  .stat-pill .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .dot-green { background: var(--green); }
-  .dot-amber { background: var(--amber); }
-  .dot-red { background: var(--red); }
-
-  /* Progress Bar */
-  .progress-banner {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .progress-label {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text3);
-    white-space: nowrap;
-    font-weight: 500;
-  }
-
-  .progress-bar-container {
-    flex: 1;
-    height: 3px;
-    background: var(--surface3);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--green3), var(--green));
-    border-radius: 2px;
-    transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
-  }
-
-  .progress-pct {
-    font-family: var(--display);
-    font-weight: 600;
-    color: var(--green);
-    font-size: 13px;
-    min-width: 36px;
-    text-align: right;
-  }
-
-  /* Tabs */
-  .tabs {
-    display: flex;
-    padding: 0 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    gap: 2px;
-  }
-
-  .tab {
-    padding: 12px 18px;
-    font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text3);
-    cursor: pointer;
-    border-bottom: 1.5px solid transparent;
-    transition: all 0.18s ease;
-    letter-spacing: 0.2px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    user-select: none;
-    margin-bottom: -1px;
-  }
-
-  .tab:hover { color: var(--text2); }
-
-  .tab.active {
-    color: var(--text);
-    border-bottom-color: var(--green);
-    font-weight: 500;
-  }
-
-  .tab-icon { font-size: 13px; opacity: 0.8; }
-
-  /* Main */
-  .main {
-    padding: 24px 32px;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-
-  /* Panel header */
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .panel-title {
-    font-family: var(--display);
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.2px;
-  }
-
-  .filter-bar {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .filter-btn {
-    padding: 5px 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border2);
-    background: transparent;
-    color: var(--text2);
-    font-family: var(--sans);
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-weight: 400;
-  }
-
-  .filter-btn:hover {
-    border-color: var(--border2);
-    color: var(--text);
-    background: var(--surface2);
-  }
-
-  .filter-btn.active {
-    border-color: rgba(61,220,132,0.3);
-    color: var(--green);
-    background: var(--green-dim);
-  }
-
-  .search-input {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 12px;
-    padding: 5px 12px;
-    outline: none;
-    width: 200px;
-    transition: border-color 0.2s;
-  }
-
-  .search-input:focus { border-color: rgba(61,220,132,0.3); }
-  .search-input::placeholder { color: var(--text3); }
-
-  /* Table */
-  .table-wrapper {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--surface);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  thead tr {
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-
-  th {
-    padding: 10px 16px;
-    text-align: left;
-    font-size: 10px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--text3);
-    font-weight: 500;
-    white-space: nowrap;
-    font-family: var(--sans);
-  }
-
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-  }
-
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--surface2); }
-
-  td {
-    padding: 12px 16px;
-    vertical-align: middle;
-  }
-
-  /* Topic cell */
-  .topic-name {
-    font-weight: 500;
-    font-size: 13px;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--sans);
-  }
-
-  .topic-category {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 2px;
-    font-weight: 400;
-  }
-
-  /* Category badge */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    letter-spacing: 0.3px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .badge-hld { background: rgba(110,181,255,0.08); color: var(--blue); border: 1px solid rgba(110,181,255,0.15); }
-  .badge-lld { background: rgba(245,166,35,0.08); color: var(--amber); border: 1px solid rgba(245,166,35,0.15); }
-
-  /* Importance */
-  .importance {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .imp-bar {
-    display: flex;
-    gap: 2px;
-  }
-
-  .imp-seg {
-    width: 6px;
-    height: 12px;
-    border-radius: 2px;
-    background: var(--surface3);
-  }
-
-  .imp-seg.on-critical { background: var(--red); opacity: 0.85; }
-  .imp-seg.on-high { background: var(--amber); opacity: 0.85; }
-  .imp-seg.on-medium { background: var(--green2); opacity: 0.85; }
-
-  .imp-label {
-    font-size: 11px;
-    color: var(--text3);
-    min-width: 48px;
-    font-weight: 400;
-  }
-
-  /* Status dropdown */
-  .status-select {
-    appearance: none;
-    -webkit-appearance: none;
-    border-radius: var(--radius-sm);
-    padding: 5px 28px 5px 10px;
-    font-family: var(--sans);
-    font-size: 11px;
-    font-weight: 400;
-    cursor: pointer;
-    outline: none;
-    border: 1px solid var(--border2);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23444'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    transition: all 0.15s;
-    min-width: 130px;
-  }
-
-  .status-select.not-started {
-    background-color: transparent;
-    color: var(--text3);
-    border-color: var(--border2);
-  }
-
-  .status-select.active {
-    background-color: var(--amber-dim);
-    color: var(--amber);
-    border-color: rgba(245,166,35,0.2);
-  }
-
-  .status-select.completed {
-    background-color: var(--green-dim);
-    color: var(--green);
-    border-color: rgba(61,220,132,0.2);
-  }
-
-  /* Companies */
-  .companies {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .company-tag {
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: 10px;
-    border: 1px solid var(--border2);
-    color: var(--text3);
-    background: transparent;
-    white-space: nowrap;
-    font-weight: 400;
-  }
-
-  /* Links cell */
-  .links-cell {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-items: center;
-  }
-
-  .link-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 9px;
-    border-radius: 4px;
-    font-size: 10px;
-    background: var(--blue-dim);
-    border: 1px solid rgba(110,181,255,0.12);
-    color: var(--blue);
-    text-decoration: none;
-    transition: all 0.15s;
-    cursor: pointer;
-    white-space: nowrap;
-    font-weight: 400;
-  }
-
-  .link-chip:hover { background: rgba(110,181,255,0.13); border-color: rgba(110,181,255,0.25); }
-
-  .add-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 9px;
-    border-radius: 4px;
-    font-size: 10px;
-    background: transparent;
-    border: 1px dashed var(--border2);
-    color: var(--text3);
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: var(--sans);
-  }
-
-  .add-link-btn:hover {
-    border-color: rgba(61,220,132,0.3);
-    color: var(--green);
-  }
-
-  /* Interview Q section */
-  .questions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 12px;
-  }
-
-  .question-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    cursor: default;
-  }
-
-  .question-card:hover {
-    border-color: var(--border2);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-  }
-
-  .question-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
-  .question-num {
-    font-size: 10px;
-    color: var(--text3);
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    margin-top: 2px;
-    font-family: var(--sans);
-  }
-
-  .question-text {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.6;
-    flex: 1;
-    font-family: var(--sans);
-  }
-
-  .question-freq {
-    display: flex;
-    gap: 3px;
-    margin-top: 2px;
-  }
-
-  .freq-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--surface3);
-  }
-
-  .freq-dot.on { background: var(--green); opacity: 0.9; }
-
-  .question-meta {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-
-  .q-tag {
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 400;
-  }
-
-  .q-tag-topic { background: var(--green-dim); color: var(--green2); border: 1px solid rgba(61,220,132,0.15); }
-  .q-tag-company { background: transparent; color: var(--text3); border: 1px solid var(--border2); }
-
-  .toggle-answer {
-    font-size: 11px;
-    color: var(--text3);
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-family: var(--sans);
-    padding: 0;
-    transition: color 0.15s;
-    margin-top: 12px;
-    display: block;
-    font-weight: 400;
-  }
-
-  .toggle-answer:hover { color: var(--green); }
-
-  .answer-box {
-    margin-top: 10px;
-    padding: 12px 14px;
-    background: var(--bg3);
-    border-radius: var(--radius-sm);
-    border-left: 2px solid rgba(61,220,132,0.3);
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.75;
-    display: none;
-    font-family: var(--sans);
-  }
-
-  .answer-box.open { display: block; }
-
-  /* Frequency tab */
-  .freq-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 10px;
-  }
-
-  .freq-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    transition: border-color 0.2s;
-  }
-
-  .freq-card:hover { border-color: var(--border2); }
-
-  .freq-card-name {
-    font-weight: 500;
-    font-size: 13px;
-    color: var(--text);
-    margin-bottom: 3px;
-    font-family: var(--sans);
-  }
-
-  .freq-card-type {
-    font-size: 10px;
-    color: var(--text3);
-    margin-bottom: 14px;
-    letter-spacing: 0.3px;
-    font-weight: 400;
-  }
-
-  .freq-meter {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .freq-meter-label {
-    font-size: 10px;
-    color: var(--text3);
-    width: 66px;
-    letter-spacing: 0.3px;
-    flex-shrink: 0;
-    font-weight: 400;
-  }
-
-  .freq-meter-bar {
-    flex: 1;
-    height: 3px;
-    background: var(--surface3);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .freq-meter-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.6s ease;
-  }
-
-  .fill-critical { background: var(--red); opacity: 0.8; }
-  .fill-high { background: var(--amber); opacity: 0.8; }
-  .fill-medium { background: var(--green2); opacity: 0.8; }
-  .fill-low { background: var(--surface3); }
-
-  .freq-pct {
-    font-size: 11px;
-    font-weight: 500;
-    min-width: 30px;
-    text-align: right;
-    color: var(--text2);
-  }
-
-  .freq-companies-label {
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.3px;
-    margin-bottom: 6px;
-    font-weight: 400;
-  }
-
-  /* Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 24px;
-    width: 440px;
-    max-width: 95vw;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-  }
-
-  .modal-title {
-    font-family: var(--display);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .modal-label {
-    font-size: 11px;
-    color: var(--text2);
-    letter-spacing: 0.3px;
-    margin-bottom: 6px;
-    font-weight: 400;
-  }
-
-  .modal-input {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 12px;
-    padding: 9px 12px;
-    outline: none;
-    margin-bottom: 14px;
-    transition: border-color 0.15s;
-  }
-
-  .modal-input:focus { border-color: rgba(61,220,132,0.3); }
-  .modal-input::placeholder { color: var(--text3); }
-
-  .modal-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    margin-top: 4px;
-  }
-
-  .btn {
-    padding: 7px 18px;
-    border-radius: var(--radius-sm);
-    font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s;
-  }
-
-  .btn-primary {
-    background: var(--green-dim);
-    color: var(--green);
-    border-color: rgba(61,220,132,0.25);
-  }
-
-  .btn-primary:hover { background: rgba(61,220,132,0.12); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text2);
-    border-color: var(--border2);
-  }
-
-  .btn-ghost:hover { color: var(--text); background: var(--surface2); }
-
-  /* Section dividers */
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 22px 0 14px;
-  }
-
-  .section-divider-label {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text3);
-    white-space: nowrap;
-    font-weight: 500;
-  }
-
-  .section-divider-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 52px;
-    color: var(--text3);
-    font-size: 12px;
-    font-weight: 400;
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
-
-  /* Tooltip */
-  [data-tooltip] { position: relative; cursor: help; }
-  [data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    color: var(--text);
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s;
-    z-index: 10;
-  }
-  [data-tooltip]:hover::after { opacity: 1; }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .section-header-sticky {
-    position: sticky;
-    top: 0;
-    background: var(--surface2);
-    z-index: 10;
-  }
-
-  .topic-icon {
-    font-size: 15px;
-    width: 26px;
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
+:root {
+  --bg:#040404; --bg2:#080808; --bg3:#0d0d0d;
+  --s1:#101010; --s2:#161616; --s3:#1e1e1e;
+  --green:#3ddc84; --green2:#2bbd6e; --green3:#1a5c38;
+  --gdim:rgba(61,220,132,.07); --gglow:0 0 20px rgba(61,220,132,.12);
+  --amber:#f5a623; --adim:rgba(245,166,35,.08);
+  --red:#f06565; --rdim:rgba(240,101,101,.08);
+  --blue:#6eb5ff; --bdim:rgba(110,181,255,.08);
+  --purple:#a78bfa; --pdim:rgba(167,139,250,.08);
+  --cyan:#22d3ee; --cdim:rgba(34,211,238,.08);
+  --text:#d0d0d0; --t2:#6a6a6a; --t3:#3a3a3a;
+  --brd:#181818; --brd2:#242424;
+  --sans:'Inter',sans-serif; --disp:'Outfit',sans-serif;
+  --r:8px; --rs:5px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── HEADER ── */
+.hdr{border-bottom:1px solid var(--brd);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,8,.95);position:sticky;top:0;z-index:200;backdrop-filter:blur(20px)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-ico{width:30px;height:30px;background:var(--gdim);border:1px solid rgba(61,220,132,.2);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:14px}
+.logo-name{font-family:var(--disp);font-size:16px;font-weight:700;color:#e8e8e8;letter-spacing:-.3px}
+.logo-name span{color:var(--green)}
+.logo-tag{font-size:9px;color:var(--t3);letter-spacing:1px;margin-top:1px}
+.hdr-pills{display:flex;gap:8px;align-items:center}
+.pill{display:flex;align-items:center;gap:6px;background:var(--s1);border:1px solid var(--brd2);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--t2)}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dg{background:var(--green)} .da{background:var(--amber)} .dr{background:var(--red)}
+
+/* ── PROGRESS ── */
+.pgbar{background:var(--bg2);border-bottom:1px solid var(--brd);padding:9px 28px;display:flex;align-items:center;gap:14px}
+.pg-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--t3);white-space:nowrap;font-weight:500}
+.pg-track{flex:1;height:3px;background:var(--s3);border-radius:2px;overflow:hidden}
+.pg-fill{height:100%;background:linear-gradient(90deg,var(--green3),var(--green));border-radius:2px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.pg-pct{font-family:var(--disp);font-weight:600;color:var(--green);font-size:13px;min-width:34px;text-align:right}
+
+/* ── TABS ── */
+.tabs{display:flex;padding:0 28px;border-bottom:1px solid var(--brd);background:var(--bg2);overflow-x:auto;gap:0}
+.tabs::-webkit-scrollbar{height:0}
+.tab{padding:11px 16px;font-size:11px;font-weight:400;color:var(--t3);cursor:pointer;border-bottom:1.5px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;margin-bottom:-1px}
+.tab:hover{color:var(--t2)}
+.tab.active{color:var(--text);border-bottom-color:var(--green);font-weight:500}
+.tab-ico{font-size:12px;opacity:.8}
+
+/* ── MAIN ── */
+.main{padding:22px 28px;max-width:1600px;margin:0 auto}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ── PANEL HEADER ── */
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.ph-title{font-family:var(--disp);font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.2px}
+.ph-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.fbar{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.fbtn{padding:4px 11px;border-radius:var(--rs);border:1px solid var(--brd2);background:transparent;color:var(--t2);font-family:var(--sans);font-size:11px;cursor:pointer;transition:all .15s}
+.fbtn:hover{color:var(--text);background:var(--s2)}
+.fbtn.active{border-color:rgba(61,220,132,.3);color:var(--green);background:var(--gdim)}
+.srch{background:var(--s1);border:1px solid var(--brd2);border-radius:var(--rs);color:var(--text);font-family:var(--sans);font-size:12px;padding:5px 11px;outline:none;width:190px;transition:border-color .15s}
+.srch:focus{border-color:rgba(61,220,132,.3)}
+.srch::placeholder{color:var(--t3)}
+
+/* ── TABLE ── */
+.tbl-wrap{border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;background:var(--s1)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--s2);border-bottom:1px solid var(--brd)}
+th{padding:9px 14px;text-align:left;font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--t3);font-weight:500;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--brd);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--s2)}
+td{padding:11px 14px;vertical-align:middle}
+.t-name{font-weight:500;font-size:13px;color:var(--text)}
+.t-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.5}
+.t-ico{font-size:14px;width:24px;flex-shrink:0;opacity:.85}
+.t-row{display:flex;align-items:center;gap:7px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;white-space:nowrap;letter-spacing:.2px}
+.b-hld{background:var(--bdim);color:var(--blue);border:1px solid rgba(110,181,255,.15)}
+.b-lld{background:var(--adim);color:var(--amber);border:1px solid rgba(245,166,35,.15)}
+.b-cr{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.18)}
+.b-st{background:var(--bdim);color:var(--blue);border:1px solid rgba(110,181,255,.15)}
+.b-bh{background:var(--gdim);color:var(--green2);border:1px solid rgba(61,220,132,.15)}
+.b-hb{background:var(--adim);color:var(--amber);border:1px solid rgba(245,166,35,.15)}
+.b-lb{background:var(--rdim);color:var(--red);border:1px solid rgba(240,101,101,.15)}
+.b-fund{background:var(--cdim);color:var(--cyan);border:1px solid rgba(34,211,238,.15)}
+
+.diff-b{background:var(--gdim);color:var(--green2);border:1px solid rgba(61,220,132,.18)}
+.diff-i{background:var(--adim);color:var(--amber);border:1px solid rgba(245,166,35,.15)}
+.diff-a{background:var(--rdim);color:var(--red);border:1px solid rgba(240,101,101,.15)}
+
+.imp-crit{background:var(--rdim);color:var(--red);border:1px solid rgba(240,101,101,.15)}
+.imp-high{background:var(--adim);color:var(--amber);border:1px solid rgba(245,166,35,.15)}
+.imp-med{background:var(--gdim);color:var(--green2);border:1px solid rgba(61,220,132,.15)}
+.imp-low{background:var(--s3);color:var(--t2);border:1px solid var(--brd2)}
+
+/* ── STATUS SELECT ── */
+.ss{appearance:none;-webkit-appearance:none;border-radius:var(--rs);padding:4px 26px 4px 9px;font-family:var(--sans);font-size:11px;font-weight:400;cursor:pointer;outline:none;border:1px solid var(--brd2);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5' viewBox='0 0 9 5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%23444'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;transition:all .15s;min-width:124px}
+.ss.ns{background-color:transparent;color:var(--t3)}
+.ss.ac{background-color:var(--adim);color:var(--amber);border-color:rgba(245,166,35,.2)}
+.ss.dn{background-color:var(--gdim);color:var(--green);border-color:rgba(61,220,132,.2)}
+
+/* ── TAGS ── */
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.ctag{padding:2px 6px;border-radius:3px;font-size:9px;border:1px solid var(--brd2);color:var(--t3);background:transparent;white-space:nowrap}
+
+/* ── LINK CHIPS ── */
+.lchips{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.lchip{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-size:10px;background:var(--bdim);border:1px solid rgba(110,181,255,.12);color:var(--blue);text-decoration:none;transition:all .15s;white-space:nowrap}
+.lchip:hover{background:rgba(110,181,255,.13);border-color:rgba(110,181,255,.25)}
+.add-lnk{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-size:10px;background:transparent;border:1px dashed var(--brd2);color:var(--t3);cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.add-lnk:hover{border-color:rgba(61,220,132,.3);color:var(--green)}
+
+/* ── RESOURCE CARDS (Library tab) ── */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.res-card{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:16px;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column;gap:10px}
+.res-card:hover{border-color:var(--brd2);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.rc-title{font-weight:500;font-size:13px;color:var(--text);line-height:1.4}
+.rc-author{font-size:11px;color:var(--t2);margin-top:3px}
+.rc-desc{font-size:11px;color:var(--t2);line-height:1.65}
+.rc-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px}
+.rc-tags{display:flex;gap:4px;flex-wrap:wrap}
+.rc-link{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:4px;font-size:11px;background:var(--gdim);border:1px solid rgba(61,220,132,.2);color:var(--green);text-decoration:none;transition:all .15s;font-weight:500;white-space:nowrap}
+.rc-link:hover{background:rgba(61,220,132,.12)}
+.rc-free{font-size:9px;padding:2px 6px;border-radius:3px;background:var(--gdim);color:var(--green2);border:1px solid rgba(61,220,132,.15);font-weight:500}
+.rc-paid{font-size:9px;padding:2px 6px;border-radius:3px;background:var(--adim);color:var(--amber);border:1px solid rgba(245,166,35,.15);font-weight:500}
+
+/* ── SECTION DIVIDER ── */
+.sdiv{display:flex;align-items:center;gap:10px;margin:18px 0 12px}
+.sdiv-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--t3);white-space:nowrap;font-weight:500}
+.sdiv-line{flex:1;height:1px;background:var(--brd)}
+
+/* ── QUESTION CARDS ── */
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:10px}
+.qcard{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:16px;transition:border-color .2s}
+.qcard:hover{border-color:var(--brd2)}
+.qcard-top{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px}
+.qnum{font-size:9px;color:var(--t3);font-weight:500;letter-spacing:.5px;white-space:nowrap;margin-top:2px;min-width:28px}
+.qtext{font-size:13px;color:var(--text);line-height:1.55;flex:1}
+.fdots{display:flex;gap:2px;margin-top:3px}
+.fd{width:5px;height:5px;border-radius:50%;background:var(--s3)}
+.fd.on{background:var(--green);opacity:.9}
+.qmeta{display:flex;gap:4px;flex-wrap:wrap}
+.qtag{padding:2px 6px;border-radius:3px;font-size:10px}
+.qt-topic{background:var(--gdim);color:var(--green2);border:1px solid rgba(61,220,132,.15)}
+.qt-co{background:transparent;color:var(--t3);border:1px solid var(--brd2)}
+.toggle-h{font-size:11px;color:var(--t3);cursor:pointer;background:none;border:none;font-family:var(--sans);padding:0;transition:color .15s;margin-top:10px;display:block}
+.toggle-h:hover{color:var(--green)}
+.hint-box{margin-top:9px;padding:11px 13px;background:var(--bg3);border-radius:var(--rs);border-left:2px solid rgba(61,220,132,.3);font-size:11px;color:var(--t2);line-height:1.75;display:none}
+.hint-box.open{display:block}
+
+/* ── ROADMAP ── */
+.roadmap{display:flex;flex-direction:column;gap:0}
+.rm-phase{border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.rm-phase-hdr{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;background:var(--s2);transition:background .15s;user-select:none}
+.rm-phase-hdr:hover{background:var(--s3)}
+.rm-ph-ico{font-size:18px}
+.rm-ph-info{flex:1}
+.rm-ph-title{font-family:var(--disp);font-size:14px;font-weight:600;color:var(--text)}
+.rm-ph-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.rm-ph-badge{font-size:10px;padding:3px 10px;border-radius:4px;font-weight:500}
+.rm-ph-arrow{font-size:12px;color:var(--t3);transition:transform .2s}
+.rm-phase-body{border-top:1px solid var(--brd);padding:16px 18px;display:none;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.rm-phase-body.open{display:grid}
+.rm-item{background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rs);padding:12px 14px;transition:border-color .15s}
+.rm-item:hover{border-color:var(--brd2)}
+.rm-item-top{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.rm-item-ico{font-size:14px;opacity:.8}
+.rm-item-name{font-size:12px;font-weight:500;color:var(--text)}
+.rm-item-desc{font-size:11px;color:var(--t2);line-height:1.55;margin-bottom:8px}
+.rm-item-links{display:flex;flex-direction:column;gap:3px}
+.rm-link{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--blue);text-decoration:none;opacity:.85;transition:opacity .15s}
+.rm-link:hover{opacity:1}
+.rm-link-type{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:600;letter-spacing:.3px}
+.lt-video{background:rgba(240,101,101,.12);color:var(--red)}
+.lt-blog{background:var(--bdim);color:var(--blue)}
+.lt-course{background:var(--pdim);color:var(--purple)}
+.lt-github{background:var(--s3);color:var(--t2)}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--brd2);border-radius:10px;padding:22px;width:430px;max-width:95vw;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-title{font-family:var(--disp);font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px}
+.ml{font-size:10px;color:var(--t2);letter-spacing:.3px;margin-bottom:5px}
+.mi{width:100%;background:var(--bg3);border:1px solid var(--brd2);border-radius:var(--rs);color:var(--text);font-family:var(--sans);font-size:12px;padding:8px 11px;outline:none;margin-bottom:12px;transition:border-color .15s}
+.mi:focus{border-color:rgba(61,220,132,.3)}
+.mi::placeholder{color:var(--t3)}
+.mbtns{display:flex;gap:7px;justify-content:flex-end;margin-top:3px}
+.btn{padding:7px 16px;border-radius:var(--rs);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s}
+.btn-p{background:var(--gdim);color:var(--green);border-color:rgba(61,220,132,.25)}
+.btn-p:hover{background:rgba(61,220,132,.12)}
+.btn-g{background:transparent;color:var(--t2);border-color:var(--brd2)}
+.btn-g:hover{color:var(--text);background:var(--s2)}
+
+/* ── MISC ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+.empty{text-align:center;padding:48px;color:var(--t3);font-size:12px}
+.count-badge{background:var(--s3);color:var(--t2);font-size:10px;padding:1px 6px;border-radius:10px;margin-left:5px}
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="header">
+<header class="hdr">
   <div class="logo">
-    <div class="logo-icon">⬡</div>
+    <div class="logo-ico">⬡</div>
     <div>
-      <div class="logo-text">SysDesign.track</div>
-      <div class="logo-sub">Interview Prep Dashboard</div>
+      <div class="logo-name">SysDesign<span>.track</span></div>
+      <div class="logo-tag">Beginner → Advanced · One Place</div>
     </div>
   </div>
-  <div class="header-stats" id="headerStats">
-    <div class="stat-pill"><span class="dot dot-green"></span><span id="completedCount">0</span> Completed</div>
-    <div class="stat-pill"><span class="dot dot-amber"></span><span id="activeCount">0</span> In Progress</div>
-    <div class="stat-pill"><span class="dot dot-red"></span><span id="notStartedCount">0</span> Not Started</div>
+  <div class="hdr-pills">
+    <div class="pill"><span class="dot dg"></span><span id="cDone">0</span>&nbsp;Done</div>
+    <div class="pill"><span class="dot da"></span><span id="cActive">0</span>&nbsp;Active</div>
+    <div class="pill"><span class="dot dr"></span><span id="cNS">0</span>&nbsp;Pending</div>
   </div>
 </header>
 
-<!-- Progress Banner -->
-<div class="progress-banner">
-  <span class="progress-label">Overall Progress</span>
-  <div class="progress-bar-container">
-    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-  </div>
-  <span class="progress-pct" id="progressPct">0%</span>
+<div class="pgbar">
+  <span class="pg-lbl">Progress</span>
+  <div class="pg-track"><div class="pg-fill" id="pgFill" style="width:0%"></div></div>
+  <span class="pg-pct" id="pgPct">0%</span>
 </div>
 
-<!-- Tabs -->
 <nav class="tabs">
-  <div class="tab active" onclick="switchTab('topics')" data-tab="topics">
-    <span class="tab-icon">📋</span> All Topics
-  </div>
-  <div class="tab" onclick="switchTab('hld')" data-tab="hld">
-    <span class="tab-icon">🏗️</span> High Level Design
-  </div>
-  <div class="tab" onclick="switchTab('lld')" data-tab="lld">
-    <span class="tab-icon">⚙️</span> Low Level Design
-  </div>
-  <div class="tab" onclick="switchTab('frequency')" data-tab="frequency">
-    <span class="tab-icon">📊</span> Frequency & Importance
-  </div>
-  <div class="tab" onclick="switchTab('questions')" data-tab="questions">
-    <span class="tab-icon">❓</span> Interview Questions
-  </div>
+  <div class="tab active" onclick="sw('roadmap')" data-tab="roadmap"><span class="tab-ico">🗺️</span> Learning Roadmap</div>
+  <div class="tab" onclick="sw('hld')" data-tab="hld"><span class="tab-ico">🏗️</span> HLD Topics</div>
+  <div class="tab" onclick="sw('lld')" data-tab="lld"><span class="tab-ico">⚙️</span> LLD Topics</div>
+  <div class="tab" onclick="sw('patterns')" data-tab="patterns"><span class="tab-ico">🧩</span> Design Patterns</div>
+  <div class="tab" onclick="sw('practice')" data-tab="practice"><span class="tab-ico">🏋️</span> Practice Problems</div>
+  <div class="tab" onclick="sw('resources')" data-tab="resources"><span class="tab-ico">📚</span> Resource Library</div>
+  <div class="tab" onclick="sw('questions')" data-tab="questions"><span class="tab-ico">❓</span> Interview Questions</div>
 </nav>
 
 <div class="main">
 
-  <!-- ALL TOPICS TAB -->
-  <div class="tab-content active" id="tab-topics">
-    <div class="panel-header">
-      <div class="panel-title">System Design Topics</div>
-      <div class="filter-bar">
-        <input class="search-input" type="text" placeholder="🔍  Search topics..." oninput="filterTopics(this.value)" />
-        <button class="filter-btn active" onclick="filterByStatus('all', this)">All</button>
-        <button class="filter-btn" onclick="filterByStatus('not-started', this)">Not Started</button>
-        <button class="filter-btn" onclick="filterByStatus('active', this)">Active</button>
-        <button class="filter-btn" onclick="filterByStatus('completed', this)">Completed</button>
-        <button class="filter-btn" onclick="filterByType('all', this)">HLD+LLD</button>
-        <button class="filter-btn" onclick="filterByType('HLD', this)">HLD Only</button>
-        <button class="filter-btn" onclick="filterByType('LLD', this)">LLD Only</button>
-      </div>
-    </div>
-    <div class="table-wrapper">
-      <table id="topicsTable">
-        <thead>
-          <tr>
-            <th style="width:32px">#</th>
-            <th style="min-width:220px">Topic</th>
-            <th>Type</th>
-            <th>Importance</th>
-            <th style="min-width:140px">Status</th>
-            <th>Asked At</th>
-            <th style="min-width:260px">Resources</th>
-          </tr>
-        </thead>
-        <tbody id="topicsBody"></tbody>
-      </table>
-    </div>
+<!-- ═══ ROADMAP TAB ═══ -->
+<div class="tab-content active" id="tab-roadmap">
+  <div class="ph">
+    <div><div class="ph-title">Learning Roadmap — Beginner to Advanced</div>
+    <div class="ph-sub">Expand each phase · Every topic has the best free resources curated for you</div></div>
   </div>
-
-  <!-- HLD TAB -->
-  <div class="tab-content" id="tab-hld">
-    <div class="panel-header">
-      <div class="panel-title">High Level Design</div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:32px">#</th>
-            <th style="min-width:220px">Topic</th>
-            <th>Importance</th>
-            <th style="min-width:140px">Status</th>
-            <th>Asked At</th>
-            <th style="min-width:260px">Resources</th>
-          </tr>
-        </thead>
-        <tbody id="hldBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- LLD TAB -->
-  <div class="tab-content" id="tab-lld">
-    <div class="panel-header">
-      <div class="panel-title">Low Level Design</div>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:32px">#</th>
-            <th style="min-width:220px">Topic</th>
-            <th>Importance</th>
-            <th style="min-width:140px">Status</th>
-            <th>Asked At</th>
-            <th style="min-width:260px">Resources</th>
-          </tr>
-        </thead>
-        <tbody id="lldBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- FREQUENCY TAB -->
-  <div class="tab-content" id="tab-frequency">
-    <div class="panel-header">
-      <div class="panel-title">Topic Frequency & Importance</div>
-    </div>
-    <div class="freq-grid" id="freqGrid"></div>
-  </div>
-
-  <!-- QUESTIONS TAB -->
-  <div class="tab-content" id="tab-questions">
-    <div class="panel-header">
-      <div class="panel-title">Most Asked Interview Questions</div>
-      <div class="filter-bar">
-        <input class="search-input" type="text" placeholder="🔍  Search questions..." oninput="filterQuestions(this.value)" />
-        <button class="filter-btn active" onclick="filterQByType('all', this)">All</button>
-        <button class="filter-btn" onclick="filterQByType('HLD', this)">HLD</button>
-        <button class="filter-btn" onclick="filterQByType('LLD', this)">LLD</button>
-      </div>
-    </div>
-    <div class="questions-grid" id="questionsGrid"></div>
-  </div>
-
+  <div class="roadmap" id="roadmapContainer"></div>
 </div>
 
-<!-- Add Link Modal -->
-<div class="modal-overlay" id="addLinkModal">
+<!-- ═══ HLD TAB ═══ -->
+<div class="tab-content" id="tab-hld">
+  <div class="ph">
+    <div><div class="ph-title">High Level Design</div><div class="ph-sub">Architecture, scalability, distributed systems</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search..." oninput="filterHLD(this.value)"/>
+      <button class="fbtn active" onclick="fhImp('all',this)">All</button>
+      <button class="fbtn" onclick="fhImp('critical',this)">Critical</button>
+      <button class="fbtn" onclick="fhImp('high',this)">High</button>
+      <button class="fbtn" onclick="fhImp('medium',this)">Medium</button>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th style="width:30px">#</th><th style="min-width:210px">Topic</th><th>Importance</th>
+    <th style="min-width:130px">Status</th><th>Asked At</th><th style="min-width:240px">Best Resources</th>
+  </tr></thead><tbody id="hldBody"></tbody></table></div>
+</div>
+
+<!-- ═══ LLD TAB ═══ -->
+<div class="tab-content" id="tab-lld">
+  <div class="ph">
+    <div><div class="ph-title">Low Level Design</div><div class="ph-sub">OOP, design patterns, class modeling</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search..." oninput="filterLLD(this.value)"/>
+      <button class="fbtn active" onclick="flImp('all',this)">All</button>
+      <button class="fbtn" onclick="flImp('critical',this)">Critical</button>
+      <button class="fbtn" onclick="flImp('high',this)">High</button>
+      <button class="fbtn" onclick="flImp('medium',this)">Medium</button>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th style="width:30px">#</th><th style="min-width:210px">Topic</th><th>Importance</th>
+    <th style="min-width:130px">Status</th><th>Key Concepts</th><th style="min-width:240px">Best Resources</th>
+  </tr></thead><tbody id="lldBody"></tbody></table></div>
+</div>
+
+<!-- ═══ PATTERNS TAB ═══ -->
+<div class="tab-content" id="tab-patterns">
+  <div class="ph">
+    <div><div class="ph-title">Design Patterns — All 23 GoF + Extras</div>
+    <div class="ph-sub">Every pattern with the best video, blog & code resource</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search patterns..." oninput="filterPat(this.value)"/>
+      <button class="fbtn active" onclick="fpCat('all',this)">All</button>
+      <button class="fbtn" onclick="fpCat('Creational',this)">Creational</button>
+      <button class="fbtn" onclick="fpCat('Structural',this)">Structural</button>
+      <button class="fbtn" onclick="fpCat('Behavioural',this)">Behavioural</button>
+      <button class="fbtn" onclick="fpCat('Fundamentals',this)">Fundamentals</button>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th style="width:30px">#</th><th style="min-width:190px">Pattern</th><th>Category</th><th>Importance</th>
+    <th style="min-width:130px">Status</th><th style="min-width:260px">One-line Idea</th><th style="min-width:260px">Best Resources</th>
+  </tr></thead><tbody id="patBody"></tbody></table></div>
+</div>
+
+<!-- ═══ PRACTICE TAB ═══ -->
+<div class="tab-content" id="tab-practice">
+  <div class="ph">
+    <div><div class="ph-title">Practice Problems</div><div class="ph-sub">Solve in order — Beginner → Intermediate → Advanced</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search..." oninput="filterPrac(this.value)"/>
+      <button class="fbtn active" onclick="fpDiff('all',this)">All</button>
+      <button class="fbtn" onclick="fpDiff('Beginner',this)">Beginner</button>
+      <button class="fbtn" onclick="fpDiff('Intermediate',this)">Intermediate</button>
+      <button class="fbtn" onclick="fpDiff('Advanced',this)">Advanced</button>
+      <button class="fbtn" onclick="fpType('all',this)">HLD+LLD</button>
+      <button class="fbtn" onclick="fpType('HLD',this)">HLD</button>
+      <button class="fbtn" onclick="fpType('LLD',this)">LLD</button>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th style="width:30px">#</th><th style="min-width:210px">Problem</th><th>Type</th><th>Difficulty</th>
+    <th style="min-width:130px">Status</th><th>Key Concepts to Apply</th><th style="min-width:220px">Resources</th>
+  </tr></thead><tbody id="pracBody"></tbody></table></div>
+</div>
+
+<!-- ═══ RESOURCES TAB ═══ -->
+<div class="tab-content" id="tab-resources">
+  <div class="ph">
+    <div><div class="ph-title">Resource Library</div><div class="ph-sub">Best courses, books, YouTube channels, GitHub repos — all curated</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search resources..." oninput="filterRes(this.value)"/>
+      <button class="fbtn active" onclick="frCat('all',this)">All</button>
+      <button class="fbtn" onclick="frCat('Course',this)">Courses</button>
+      <button class="fbtn" onclick="frCat('Video',this)">YouTube</button>
+      <button class="fbtn" onclick="frCat('Book',this)">Books</button>
+      <button class="fbtn" onclick="frCat('GitHub',this)">GitHub</button>
+      <button class="fbtn" onclick="frCat('Blog',this)">Blogs</button>
+    </div>
+  </div>
+  <div class="res-grid" id="resGrid"></div>
+</div>
+
+<!-- ═══ QUESTIONS TAB ═══ -->
+<div class="tab-content" id="tab-questions">
+  <div class="ph">
+    <div><div class="ph-title">Most Asked Interview Questions</div><div class="ph-sub">Real questions from FAANG + product companies with approach hints</div></div>
+    <div class="fbar">
+      <input class="srch" type="text" placeholder="🔍 Search..." oninput="filterQ(this.value)"/>
+      <button class="fbtn active" onclick="fqType('all',this)">All</button>
+      <button class="fbtn" onclick="fqType('HLD',this)">HLD</button>
+      <button class="fbtn" onclick="fqType('LLD',this)">LLD</button>
+    </div>
+  </div>
+  <div class="q-grid" id="qGrid"></div>
+</div>
+
+</div><!-- /main -->
+
+<!-- Modal -->
+<div class="overlay" id="linkModal">
   <div class="modal">
-    <div class="modal-title">⊕ Add Resource Link</div>
-    <div id="modalTopicName" style="font-size:12px;color:var(--text2);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)"></div>
-    <div class="modal-label">Link Title</div>
-    <input class="modal-input" type="text" id="linkTitle" placeholder="e.g. System Design Primer — Scaling"/>
-    <div class="modal-label">URL</div>
-    <input class="modal-input" type="text" id="linkUrl" placeholder="https://medium.com/..."/>
-    <div class="modal-buttons">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveLink()">Add Link</button>
+    <div class="modal-title">Add Resource Link</div>
+    <div id="modalTopic" style="font-size:11px;color:var(--t2);margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--brd)"></div>
+    <div class="ml">Title</div><input class="mi" type="text" id="lTitle" placeholder="e.g. System Design Primer"/>
+    <div class="ml">URL</div><input class="mi" type="text" id="lUrl" placeholder="https://..."/>
+    <div class="mbtns">
+      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-p" onclick="saveLink()">Add</button>
     </div>
   </div>
 </div>
 
 <script>
-// ===================== DATA =====================
-const topicsData = [
-  // ---- HLD ----
-  { id:1,  name:"URL Shortener (Bit.ly)", type:"HLD", icon:"🔗", importance:"critical", companies:["Amazon","Google","Microsoft","Uber"],
-    links:[{title:"Designing TinyURL",url:"https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR"}],
-    desc:"Scalable URL shortening service" },
-  { id:2,  name:"Twitter / Social Feed", type:"HLD", icon:"🐦", importance:"critical", companies:["Twitter","Facebook","LinkedIn","Snap"],
-    links:[{title:"Designing Twitter",url:"https://www.educative.io/courses/grokking-the-system-design-interview/m2G48X18NDO"}],
-    desc:"News feed, fanout, timeline" },
-  { id:3,  name:"YouTube / Netflix (Video Streaming)", type:"HLD", icon:"▶️", importance:"critical", companies:["Netflix","YouTube","Amazon","Microsoft"],
-    links:[{title:"Designing YouTube",url:"https://www.educative.io/courses/grokking-the-system-design-interview/xV26VjZ7yMl"}],
-    desc:"Video upload, CDN, transcoding" },
-  { id:4,  name:"WhatsApp / Chat System", type:"HLD", icon:"💬", importance:"critical", companies:["WhatsApp","Slack","Discord","Microsoft"],
-    links:[{title:"Designing a Chat App",url:"https://medium.com/swlh/design-a-chat-system-f20a9e0ff1e3"}],
-    desc:"Real-time messaging, WebSockets" },
-  { id:5,  name:"Uber / Ride Sharing", type:"HLD", icon:"🚗", importance:"critical", companies:["Uber","Lyft","Ola","DoorDash"],
-    links:[{title:"Uber System Design",url:"https://medium.com/@narengowda/uber-system-design-8b2bc95e2cfe"}],
-    desc:"Geo-indexing, matching, surge" },
-  { id:6,  name:"Google Search", type:"HLD", icon:"🔍", importance:"critical", companies:["Google","Bing","Amazon"],
-    links:[{title:"Search Autocomplete Design",url:"https://www.educative.io/courses/grokking-the-system-design-interview/mE2XkgGRnmp"}],
-    desc:"Crawling, indexing, ranking" },
-  { id:7,  name:"Instagram / Photo Sharing", type:"HLD", icon:"📸", importance:"high", companies:["Meta","Pinterest","Snap","Twitter"],
-    links:[{title:"Designing Instagram",url:"https://www.educative.io/courses/grokking-the-system-design-interview/m22LWKgXOEm"}],
-    desc:"Media storage, CDN, feed" },
-  { id:8,  name:"Amazon / E-Commerce", type:"HLD", icon:"🛒", importance:"high", companies:["Amazon","Flipkart","Shopify","eBay"],
-    links:[{title:"E-Commerce System Design",url:"https://medium.com/nerd-for-tech/system-design-of-e-commerce-platform-like-amazon-9d2f3e6b82f"}],
-    desc:"Product catalog, cart, orders, payments" },
-  { id:9,  name:"Rate Limiter", type:"HLD", icon:"🚦", importance:"critical", companies:["Stripe","Cloudflare","Google","Amazon"],
-    links:[{title:"System Design Rate Limiter",url:"https://medium.com/@saurabh.codes/system-design-rate-limiter-1e89a4a66a32"}],
-    desc:"Token bucket, leaky bucket, sliding window" },
-  { id:10, name:"Distributed Cache (Redis)", type:"HLD", icon:"⚡", importance:"critical", companies:["Amazon","Google","Meta","Netflix"],
-    links:[{title:"Design a Distributed Cache",url:"https://medium.com/system-design-blog/distributed-cache-system-design-9a8b4d19e9b3"}],
-    desc:"Eviction policies, consistency, sharding" },
-  { id:11, name:"CDN (Content Delivery Network)", type:"HLD", icon:"🌐", importance:"high", companies:["Cloudflare","Amazon","Netflix","Akamai"],
-    links:[{title:"How CDN Works",url:"https://medium.com/netflix-techblog/open-connect-overview-7c23e0e8c5f0"}],
-    desc:"Edge caching, PoPs, cache invalidation" },
-  { id:12, name:"Message Queue (Kafka)", type:"HLD", icon:"📨", importance:"critical", companies:["LinkedIn","Uber","Netflix","Airbnb"],
-    links:[{title:"Kafka System Design",url:"https://medium.com/@pankaj.itdeveloper/apache-kafka-architecture-and-design-2c5b3b4e1f8d"}],
-    desc:"Pub/sub, partitions, consumer groups" },
-  { id:13, name:"Notification System", type:"HLD", icon:"🔔", importance:"high", companies:["Apple","Google","Meta","Slack"],
-    links:[{title:"Design Notification System",url:"https://medium.com/nerd-for-tech/system-design-notification-system-9d0e0f73a4e2"}],
-    desc:"Push, SMS, email, fanout" },
-  { id:14, name:"Google Maps / Location Service", type:"HLD", icon:"📍", importance:"high", companies:["Google","Uber","DoorDash","Lyft"],
-    links:[{title:"Designing Google Maps",url:"https://medium.com/@narengowda/designing-google-maps-a66e24e3e3c0"}],
-    desc:"Geo-spatial indexing, routing, ETA" },
-  { id:15, name:"Distributed File Storage (S3)", type:"HLD", icon:"🗄️", importance:"high", companies:["Amazon","Google","Dropbox","Box"],
-    links:[{title:"Design Dropbox",url:"https://www.educative.io/courses/grokking-the-system-design-interview/gxMDOe16mql"}],
-    desc:"Object storage, replication, deduplication" },
-  { id:16, name:"Search Autocomplete / Typeahead", type:"HLD", icon:"✏️", importance:"high", companies:["Google","Amazon","Twitter","LinkedIn"],
-    links:[{title:"Typeahead Search Design",url:"https://www.educative.io/courses/grokking-the-system-design-interview/mE2XkgGRnmp"}],
-    desc:"Trie, prefix search, caching" },
-  { id:17, name:"Ticketmaster / Event Booking", type:"HLD", icon:"🎟️", importance:"high", companies:["Ticketmaster","BookMyShow","Amazon"],
-    links:[{title:"Design Ticketmaster",url:"https://medium.com/@liamchzh/system-design-ticketmaster-9c4e85e02d7c"}],
-    desc:"Seat selection, concurrency, payments" },
-  { id:18, name:"Google Docs / Collaborative Editor", type:"HLD", icon:"📄", importance:"high", companies:["Google","Microsoft","Notion","Atlassian"],
-    links:[{title:"Collaborative Editing Design",url:"https://medium.com/@saurabh.codes/google-docs-system-design-real-time-collaboration-97e3c0c0a0e5"}],
-    desc:"OT, CRDT, conflict resolution" },
-  { id:19, name:"Payment System / Stripe", type:"HLD", icon:"💳", importance:"high", companies:["Stripe","PayPal","Razorpay","Square"],
-    links:[{title:"Design a Payment System",url:"https://medium.com/system-design-blog/payment-system-design-3f3b2e2e0f6d"}],
-    desc:"Idempotency, double-spend, ledger" },
-  { id:20, name:"Recommendation Engine", type:"HLD", icon:"🎯", importance:"medium", companies:["Netflix","Spotify","Amazon","YouTube"],
-    links:[{title:"Recommendation System Design",url:"https://medium.com/netflix-techblog/system-architectures-for-personalization-and-recommendation-e081aa94b5d8"}],
-    desc:"Collaborative filtering, ML pipeline" },
-  { id:21, name:"API Gateway / Load Balancer", type:"HLD", icon:"🔀", importance:"critical", companies:["Amazon","Netflix","Uber","Cloudflare"],
-    links:[{title:"API Gateway Design",url:"https://medium.com/system-design-blog/api-gateway-design-6b2c8d1f3e9a"}],
-    desc:"L4/L7 load balancing, reverse proxy" },
-  { id:22, name:"Log / Metrics Aggregation", type:"HLD", icon:"📈", importance:"medium", companies:["Datadog","Splunk","Netflix","Uber"],
-    links:[{title:"Distributed Logging Design",url:"https://medium.com/@pankaj.itdeveloper/distributed-logging-system-design-4e3f2c1b0d7a"}],
-    desc:"Time-series data, aggregation, alerting" },
-  { id:23, name:"Web Crawler", type:"HLD", icon:"🕷️", importance:"medium", companies:["Google","Amazon","Bing"],
-    links:[{title:"Design a Web Crawler",url:"https://www.educative.io/courses/grokking-the-system-design-interview/NE5LpPrWrKv"}],
-    desc:"BFS, politeness, deduplication" },
-  { id:24, name:"Distributed ID Generator", type:"HLD", icon:"🆔", importance:"high", companies:["Twitter","Instagram","Uber","Discord"],
-    links:[{title:"Snowflake ID Design",url:"https://medium.com/@pankaj.itdeveloper/twitter-snowflake-unique-id-generator-2c3f4e5b1a9d"}],
-    desc:"Snowflake, UUID, monotonic IDs" },
-  { id:25, name:"Consistent Hashing", type:"HLD", icon:"🔄", importance:"critical", companies:["Amazon","Google","Cassandra","Redis"],
-    links:[{title:"Consistent Hashing Explained",url:"https://medium.com/system-design-blog/consistent-hashing-a296b46e9c7f"}],
-    desc:"Virtual nodes, ring topology" },
-  { id:26, name:"CAP Theorem / BASE / ACID", type:"HLD", icon:"📐", importance:"critical", companies:["All FAANG","Stripe","Cloudflare"],
-    links:[{title:"CAP Theorem Deep Dive",url:"https://medium.com/system-design-blog/cap-theorem-in-depth-e2b3c4d5f6a7"}],
-    desc:"Consistency vs Availability trade-offs" },
-  { id:27, name:"Database Sharding & Partitioning", type:"HLD", icon:"🗃️", importance:"critical", companies:["Amazon","Google","Uber","Airbnb"],
-    links:[{title:"Database Sharding Guide",url:"https://medium.com/system-design-blog/database-sharding-9c3f2d1e5b8a"}],
-    desc:"Horizontal scaling, hot spots, rebalancing" },
-  { id:28, name:"Circuit Breaker / Resiliency", type:"HLD", icon:"⚠️", importance:"high", companies:["Netflix","Amazon","Uber","Microsoft"],
-    links:[{title:"Circuit Breaker Pattern",url:"https://medium.com/@pankaj.itdeveloper/circuit-breaker-design-pattern-1a2b3c4d5e6f"}],
-    desc:"Retry, timeout, bulkhead patterns" },
-  // ---- LLD ----
-  { id:29, name:"Parking Lot System", type:"LLD", icon:"🅿️", importance:"high", companies:["Amazon","Microsoft","Uber"],
-    links:[{title:"Parking Lot LLD",url:"https://medium.com/nerd-for-tech/low-level-design-of-a-parking-lot-system-58e2a34e05c4"}],
-    desc:"OOP design, slots, billing" },
-  { id:30, name:"Elevator / Lift System", type:"LLD", icon:"🛗", importance:"high", companies:["Amazon","Google","Microsoft"],
-    links:[{title:"Elevator System LLD",url:"https://medium.com/nerd-for-tech/object-oriented-design-of-an-elevator-system-in-java-ef21f47df69f"}],
-    desc:"Scheduling algorithms, states" },
-  { id:31, name:"Library Management System", type:"LLD", icon:"📚", importance:"medium", companies:["Amazon","Google","Microsoft"],
-    links:[{title:"Library System LLD",url:"https://medium.com/nerd-for-tech/low-level-design-library-management-system-7e2a3f4b5c9d"}],
-    desc:"Books, members, lending, fines" },
-  { id:32, name:"Hotel Booking System", type:"LLD", icon:"🏨", importance:"high", companies:["Booking.com","Airbnb","Expedia","Google"],
-    links:[{title:"Hotel Booking LLD",url:"https://medium.com/nerd-for-tech/low-level-design-hotel-booking-9f3a2c1b8e7d"}],
-    desc:"Rooms, reservations, availability" },
-  { id:33, name:"Chess / Board Game", type:"LLD", icon:"♟️", importance:"high", companies:["Amazon","Google","Microsoft"],
-    links:[{title:"Chess Game LLD",url:"https://medium.com/nerd-for-tech/low-level-design-of-chess-game-using-object-oriented-design-7b1e8f4c3a5d"}],
-    desc:"Pieces, moves, turns, game state" },
-  { id:34, name:"ATM System", type:"LLD", icon:"🏧", importance:"high", companies:["Amazon","Google","IBM"],
-    links:[{title:"ATM System LLD",url:"https://medium.com/nerd-for-tech/low-level-design-atm-machine-2c3f1a9b8e7d"}],
-    desc:"Cards, accounts, transactions, states" },
-  { id:35, name:"LRU Cache", type:"LLD", icon:"💾", importance:"critical", companies:["Google","Amazon","Meta","Microsoft"],
-    links:[{title:"LRU Cache Design",url:"https://medium.com/@pankaj.itdeveloper/lru-cache-implementation-2a3f4c5b1d8e"}],
-    desc:"HashMap + DLL, O(1) ops" },
-  { id:36, name:"Logger / Logging Framework", type:"LLD", icon:"📝", importance:"medium", companies:["Amazon","Google","Microsoft"],
-    links:[{title:"Logger System LLD",url:"https://medium.com/nerd-for-tech/low-level-design-logger-system-3e4f2c1b9a8d"}],
-    desc:"Log levels, appenders, formatters" },
-  { id:37, name:"Vending Machine", type:"LLD", icon:"🥤", importance:"high", companies:["Amazon","Google","Uber"],
-    links:[{title:"Vending Machine LLD",url:"https://medium.com/nerd-for-tech/low-level-design-vending-machine-7a2c3f1e9b8d"}],
-    desc:"State machine, inventory, payments" },
-  { id:38, name:"Snake & Ladder / Board Game", type:"LLD", icon:"🎲", importance:"medium", companies:["Amazon","Microsoft"],
-    links:[{title:"Snake & Ladder LLD",url:"https://medium.com/nerd-for-tech/design-snake-and-ladder-game-1c2f3a9b8e7d"}],
-    desc:"Board, dice, players, moves" },
-  { id:39, name:"Splitwise / Expense Sharing", type:"LLD", icon:"💰", importance:"high", companies:["Amazon","Airbnb","Uber"],
-    links:[{title:"Splitwise LLD",url:"https://medium.com/nerd-for-tech/low-level-design-splitwise-2f3a1c9b8e7d"}],
-    desc:"Groups, expenses, simplify debts" },
-  { id:40, name:"Food Delivery App (Swiggy/Zomato)", type:"LLD", icon:"🍕", importance:"high", companies:["Swiggy","Zomato","DoorDash","Uber Eats"],
-    links:[{title:"Food Delivery LLD",url:"https://medium.com/nerd-for-tech/low-level-design-food-delivery-3c4f2a1b9e8d"}],
-    desc:"Restaurants, orders, delivery, tracking" },
-  { id:41, name:"Movie Ticket Booking (BookMyShow)", type:"LLD", icon:"🎬", importance:"high", companies:["BookMyShow","Ticketmaster","Fandango"],
-    links:[{title:"BookMyShow LLD",url:"https://medium.com/nerd-for-tech/design-bookmyshow-low-level-design-4e3f2c1a9b8d"}],
-    desc:"Theatres, shows, seats, payments" },
-  { id:42, name:"Observer / Pub-Sub Pattern", type:"LLD", icon:"📡", importance:"high", companies:["All FAANG","Stripe","Salesforce"],
-    links:[{title:"Observer Pattern",url:"https://medium.com/nerd-for-tech/observer-design-pattern-5e4c3b2a1f9d"}],
-    desc:"Event system, decoupling, callbacks" },
-  { id:43, name:"Strategy / Factory Design Patterns", type:"LLD", icon:"🏭", importance:"critical", companies:["All FAANG","Stripe","Atlassian"],
-    links:[{title:"Design Patterns Guide",url:"https://medium.com/nerd-for-tech/design-patterns-every-developer-should-know-6e5c4b3a2f1d"}],
-    desc:"GoF patterns, SOLID principles" },
-  { id:44, name:"Cricinfo / Live Sports Score", type:"LLD", icon:"🏏", importance:"medium", companies:["Amazon","Google","ESPN"],
-    links:[{title:"Cricket Score System LLD",url:"https://medium.com/nerd-for-tech/low-level-design-cricinfo-7a3c2f1b8e9d"}],
-    desc:"Match, innings, players, live updates" },
-  { id:45, name:"SOLID Principles", type:"LLD", icon:"🔩", importance:"critical", companies:["All FAANG","Microsoft","Atlassian"],
-    links:[{title:"SOLID Principles in Depth",url:"https://medium.com/nerd-for-tech/solid-principles-explained-2a3f4c5b1d8e"}],
-    desc:"SRP, OCP, LSP, ISP, DIP" },
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const ROADMAP = [
+  {
+    phase:"Phase 1 — Foundations", icon:"🌱", badge:"Beginner", badgeCls:"diff-b",
+    sub:"Start here. Build strong fundamentals before jumping to systems.",
+    items:[
+      { ico:"🌐", name:"How the Internet Works",
+        desc:"IP, DNS, TCP/IP, HTTP/HTTPS basics. What happens when you type a URL.",
+        links:[
+          {t:"📹 How the Internet Works (Fireship)",u:"https://youtu.be/zN8YNNHcaZc",lt:"video"},
+          {t:"📖 How DNS Works",u:"https://howdns.works",lt:"blog"},
+          {t:"📖 MDN: HTTP Overview",u:"https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",lt:"blog"},
+        ]},
+      { ico:"🔌", name:"TCP vs UDP",
+        desc:"Reliable vs fast delivery. When to use which. Three-way handshake.",
+        links:[
+          {t:"📹 TCP vs UDP (Hussain Nasser)",u:"https://youtu.be/qqRYkcazoms",lt:"video"},
+          {t:"📖 TCP vs UDP Explained",u:"https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp",lt:"blog"},
+        ]},
+      { ico:"🗄️", name:"SQL vs NoSQL",
+        desc:"Relational vs document/key-value/graph. ACID vs BASE. When to choose what.",
+        links:[
+          {t:"📹 SQL vs NoSQL (Fireship)",u:"https://youtu.be/t8U3MqVljqA",lt:"video"},
+          {t:"📖 SQL vs NoSQL — Martin Fowler",u:"https://martinfowler.com/books/nosql.html",lt:"blog"},
+          {t:"📹 Databases (Neetcode)",u:"https://youtu.be/W2Z7fbCLSTw",lt:"video"},
+        ]},
+      { ico:"📇", name:"Database Indexing",
+        desc:"B-tree indexes, covering indexes, when indexes hurt. Query optimisation.",
+        links:[
+          {t:"📹 DB Indexing Explained",u:"https://youtu.be/-qNSXK7s7_w",lt:"video"},
+          {t:"📖 Use The Index, Luke",u:"https://use-the-index-luke.com",lt:"blog"},
+        ]},
+      { ico:"⚡", name:"Caching Fundamentals",
+        desc:"Why cache? Cache-aside, write-through, write-back. LRU, LFU. Redis basics.",
+        links:[
+          {t:"📹 Caching (ByteByteGo)",u:"https://youtu.be/dGAgxozNWFE",lt:"video"},
+          {t:"📖 Caching Strategies",u:"https://medium.com/system-design-blog/caching-strategies-explained",lt:"blog"},
+        ]},
+      { ico:"🏗️", name:"OOP Principles (4 Pillars)",
+        desc:"Encapsulation, Abstraction, Inheritance, Polymorphism with real examples.",
+        links:[
+          {t:"📹 OOP Explained (Fireship)",u:"https://youtu.be/pTB0EiLXUC8",lt:"video"},
+          {t:"📖 OOP in Java — Baeldung",u:"https://www.baeldung.com/java-oop",lt:"blog"},
+        ]},
+      { ico:"🔩", name:"SOLID Principles",
+        desc:"SRP, OCP, LSP, ISP, DIP. The backbone of every LLD interview answer.",
+        links:[
+          {t:"📹 SOLID Principles (ArjanCodes)",u:"https://youtu.be/pTB0EiLXUC8",lt:"video"},
+          {t:"📖 SOLID Explained — DigitalOcean",u:"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design",lt:"blog"},
+          {t:"📖 SOLID — Baeldung",u:"https://www.baeldung.com/solid-principles",lt:"blog"},
+        ]},
+    ]
+  },
+  {
+    phase:"Phase 2 — Core HLD Building Blocks", icon:"🧱", badge:"Beginner–Intermediate", badgeCls:"diff-i",
+    sub:"The 10 concepts that appear in almost every system design interview.",
+    items:[
+      { ico:"⚖️", name:"Load Balancing",
+        desc:"Round-robin, least-connections, IP hash. L4 vs L7. Sticky sessions.",
+        links:[
+          {t:"📹 Load Balancing (ByteByteGo)",u:"https://youtu.be/K0Ta65OqQkY",lt:"video"},
+          {t:"📖 Load Balancing — NGINX",u:"https://www.nginx.com/resources/glossary/load-balancing",lt:"blog"},
+        ]},
+      { ico:"🔀", name:"Horizontal vs Vertical Scaling",
+        desc:"Scale up vs scale out. Stateless services. Database scaling patterns.",
+        links:[
+          {t:"📹 Scaling (ByteByteGo)",u:"https://youtu.be/xpDnVSmNFX0",lt:"video"},
+          {t:"📖 Scaling Patterns",u:"https://medium.com/system-design-blog/scaling-patterns",lt:"blog"},
+        ]},
+      { ico:"🌐", name:"CDN & Edge Caching",
+        desc:"Push vs pull CDN. Cache-Control headers. Serving static assets globally.",
+        links:[
+          {t:"📹 CDN (Fireship)",u:"https://youtu.be/RI9np1LWzqw",lt:"video"},
+          {t:"📖 How CDN Works — Cloudflare",u:"https://www.cloudflare.com/learning/cdn/what-is-a-cdn",lt:"blog"},
+        ]},
+      { ico:"📨", name:"Message Queues",
+        desc:"Async decoupling. Queue vs Topic. At-least-once delivery. Kafka vs RabbitMQ.",
+        links:[
+          {t:"📹 Message Queues (IBM)",u:"https://youtu.be/oUJbuFMyBDk",lt:"video"},
+          {t:"📹 Kafka in 100 Seconds",u:"https://youtu.be/uvb00oaa3k8",lt:"video"},
+          {t:"📖 Kafka Docs",u:"https://kafka.apache.org/documentation",lt:"blog"},
+        ]},
+      { ico:"🔄", name:"Consistent Hashing",
+        desc:"Hash ring, virtual nodes, minimal data movement. Used in DynamoDB, Cassandra.",
+        links:[
+          {t:"📹 Consistent Hashing (ByteByteGo)",u:"https://youtu.be/UF9Iqmg94tk",lt:"video"},
+          {t:"📖 Consistent Hashing — Tom White",u:"https://tom-e-white.com/2007/11/consistent-hashing.html",lt:"blog"},
+        ]},
+      { ico:"📐", name:"CAP Theorem",
+        desc:"Consistency, Availability, Partition Tolerance. Why you can only pick 2.",
+        links:[
+          {t:"📹 CAP Theorem (ByteByteGo)",u:"https://youtu.be/BHqjEjzAicA",lt:"video"},
+          {t:"📖 CAP FAQ — Henry Robinson",u:"https://www.cl.cam.ac.uk/research/dtg/archived/files/publications/public/mk428/cap-critique.pdf",lt:"blog"},
+        ]},
+      { ico:"🗃️", name:"Database Sharding",
+        desc:"Range vs hash sharding. Hot spots. Resharding. Cross-shard queries.",
+        links:[
+          {t:"📹 Database Sharding (ByteByteGo)",u:"https://youtu.be/5faMjKuB9bc",lt:"video"},
+          {t:"📖 DB Sharding — Shopify",u:"https://shopify.engineering/this-is-your-brain-on-database",lt:"blog"},
+        ]},
+      { ico:"🔁", name:"Database Replication",
+        desc:"Primary-replica, multi-primary. Sync vs async. Read replicas for scaling reads.",
+        links:[
+          {t:"📹 Replication (ByteByteGo)",u:"https://youtu.be/RIcNswROzCc",lt:"video"},
+          {t:"📖 Replication — PostgreSQL Docs",u:"https://www.postgresql.org/docs/current/high-availability.html",lt:"blog"},
+        ]},
+      { ico:"🚦", name:"Rate Limiting",
+        desc:"Token bucket, sliding window, fixed window. Per-user vs global. 429 responses.",
+        links:[
+          {t:"📹 Rate Limiting (ByteByteGo)",u:"https://youtu.be/FU4WlwfS3G0",lt:"video"},
+          {t:"📖 Rate Limiting Algorithms",u:"https://medium.com/system-design-blog/rate-limiter-algorithms",lt:"blog"},
+        ]},
+      { ico:"🆔", name:"Unique ID Generation",
+        desc:"UUID, Snowflake ID, auto-increment pitfalls. Twitter Snowflake deep dive.",
+        links:[
+          {t:"📹 Unique ID Generation (ByteByteGo)",u:"https://youtu.be/lfhGHm2DcME",lt:"video"},
+          {t:"📖 Twitter Snowflake",u:"https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake",lt:"blog"},
+        ]},
+    ]
+  },
+  {
+    phase:"Phase 3 — LLD & Design Patterns", icon:"🧩", badge:"Intermediate", badgeCls:"diff-i",
+    sub:"Object-Oriented design, all 23 GoF patterns, SOLID in practice.",
+    items:[
+      { ico:"🏭", name:"Creational Patterns (6)",
+        desc:"Singleton, Factory Method, Abstract Factory, Builder, Prototype, Object Pool.",
+        links:[
+          {t:"📹 All Creational Patterns (Derek Banas)",u:"https://youtu.be/vNHpsC5ng_E",lt:"video"},
+          {t:"📖 Refactoring.Guru — Creational",u:"https://refactoring.guru/design-patterns/creational-patterns",lt:"blog"},
+          {t:"📹 Christopher Okhravi Playlist",u:"https://youtube.com/playlist?list=PLrhzvIcii6GNjpARjnq4yD3HHUnTSN5pC",lt:"video"},
+        ]},
+      { ico:"🌉", name:"Structural Patterns (7)",
+        desc:"Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy.",
+        links:[
+          {t:"📹 Structural Patterns (Derek Banas)",u:"https://youtu.be/lPsSL6_7NBg",lt:"video"},
+          {t:"📖 Refactoring.Guru — Structural",u:"https://refactoring.guru/design-patterns/structural-patterns",lt:"blog"},
+        ]},
+      { ico:"🔄", name:"Behavioural Patterns (11)",
+        desc:"Chain, Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template, Visitor, Interpreter.",
+        links:[
+          {t:"📹 Behavioural Patterns (Derek Banas)",u:"https://youtu.be/d9wyhy3yP1E",lt:"video"},
+          {t:"📖 Refactoring.Guru — Behavioural",u:"https://refactoring.guru/design-patterns/behavioral-patterns",lt:"blog"},
+        ]},
+      { ico:"📋", name:"UML Class Diagrams",
+        desc:"Association, aggregation, composition, inheritance. Draw before you code.",
+        links:[
+          {t:"📹 UML Class Diagrams (Lucidchart)",u:"https://youtu.be/UI6lqHOVHic",lt:"video"},
+          {t:"📖 UML Guide — Visual Paradigm",u:"https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial",lt:"blog"},
+        ]},
+      { ico:"🧵", name:"Concurrency & Thread Safety",
+        desc:"Race conditions, deadlocks, mutex, semaphore, lock-free structures.",
+        links:[
+          {t:"📹 Java Concurrency (Amigoscode)",u:"https://youtu.be/d9s_d28yJq0",lt:"video"},
+          {t:"📖 Java Concurrency in Practice (Book)",u:"https://jcip.net",lt:"blog"},
+        ]},
+    ]
+  },
+  {
+    phase:"Phase 4 — Intermediate System Design", icon:"⚙️", badge:"Intermediate", badgeCls:"diff-i",
+    sub:"Design real products end to end. Learn the tradeoffs.",
+    items:[
+      { ico:"🔗", name:"URL Shortener",
+        desc:"Base62, hash collisions, redirect at scale, analytics. Your first HLD problem.",
+        links:[
+          {t:"📹 URL Shortener (Neetcode)",u:"https://youtu.be/JQDHz72LtRQ",lt:"video"},
+          {t:"📖 Grokking — TinyURL",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR",lt:"course"},
+        ]},
+      { ico:"💬", name:"Chat System (WhatsApp)",
+        desc:"WebSockets, offline message delivery, message ordering, Cassandra storage.",
+        links:[
+          {t:"📹 Chat System (ByteByteGo)",u:"https://youtu.be/vvhC64hQZMk",lt:"video"},
+          {t:"📖 Designing WhatsApp",u:"https://medium.com/swlh/design-a-chat-system-f20a9e0ff1e3",lt:"blog"},
+        ]},
+      { ico:"📸", name:"Instagram / Photo Feed",
+        desc:"Object storage, CDN, feed generation (push vs pull), follow graph.",
+        links:[
+          {t:"📹 Instagram (ByteByteGo)",u:"https://youtu.be/hnpzNAPiC0E",lt:"video"},
+          {t:"📖 Grokking — Instagram",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m22LWKgXOEm",lt:"course"},
+        ]},
+      { ico:"🐦", name:"Twitter Timeline (Fanout)",
+        desc:"Fanout-on-write vs read. Celebrity problem. Redis timeline cache.",
+        links:[
+          {t:"📹 Twitter Design (Gaurav Sen)",u:"https://youtu.be/wYk0xPP_P_8",lt:"video"},
+          {t:"📖 Twitter Real Architecture",u:"https://blog.twitter.com/engineering/en_us/topics/infrastructure",lt:"blog"},
+        ]},
+      { ico:"🔔", name:"Notification System",
+        desc:"APNs, FCM, fanout queue, priority, retries, user preferences.",
+        links:[
+          {t:"📹 Notification System (ByteByteGo)",u:"https://youtu.be/bBTPZ9NdSk8",lt:"video"},
+          {t:"📖 Notification Design Guide",u:"https://medium.com/nerd-for-tech/system-design-notification-system",lt:"blog"},
+        ]},
+      { ico:"🅿️", name:"Parking Lot (LLD)",
+        desc:"Singleton, Strategy (pricing), multiple vehicle types, tickets, floors.",
+        links:[
+          {t:"📹 Parking Lot LLD (Udit Agarwal)",u:"https://youtu.be/DSGsa0pu8-k",lt:"video"},
+          {t:"📖 Parking Lot LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-of-a-parking-lot-system-58e2a34e05c4",lt:"blog"},
+        ]},
+      { ico:"💾", name:"LRU Cache (LLD)",
+        desc:"HashMap + Doubly linked list. O(1) get/put. Thread-safe variant.",
+        links:[
+          {t:"📹 LRU Cache (Nick White)",u:"https://youtu.be/S6IfqDXWa10",lt:"video"},
+          {t:"📖 LRU Cache Implementation",u:"https://medium.com/@pankaj.itdeveloper/lru-cache-implementation",lt:"blog"},
+        ]},
+    ]
+  },
+  {
+    phase:"Phase 5 — Advanced System Design", icon:"🚀", badge:"Advanced", badgeCls:"diff-a",
+    sub:"Distributed systems at scale. The problems that separate senior engineers.",
+    items:[
+      { ico:"▶️", name:"Video Streaming (YouTube/Netflix)",
+        desc:"HLS/DASH, adaptive bitrate, transcoding pipeline, CDN strategy.",
+        links:[
+          {t:"📹 Netflix Architecture (InfoQ)",u:"https://youtu.be/psQzyFfsUGU",lt:"video"},
+          {t:"📖 Netflix Tech Blog",u:"https://netflixtechblog.com",lt:"blog"},
+          {t:"📖 Grokking — YouTube",u:"https://www.educative.io/courses/grokking-the-system-design-interview/xV26VjZ7yMl",lt:"course"},
+        ]},
+      { ico:"🚗", name:"Uber / Ride Sharing",
+        desc:"Geohash, driver matching, real-time location, surge pricing, ETA.",
+        links:[
+          {t:"📹 Uber Design (Gaurav Sen)",u:"https://youtu.be/umWABit-wbk",lt:"video"},
+          {t:"📖 Uber Engineering Blog",u:"https://eng.uber.com",lt:"blog"},
+        ]},
+      { ico:"📄", name:"Google Docs (Real-time Collab)",
+        desc:"Operational Transformation, CRDT, vector clocks, WebSocket broadcast.",
+        links:[
+          {t:"📹 Google Docs Architecture",u:"https://youtu.be/2auwirNBvGg",lt:"video"},
+          {t:"📖 OT & CRDT Explained",u:"https://medium.com/system-design-blog/google-docs-system-design",lt:"blog"},
+        ]},
+      { ico:"💳", name:"Payment System",
+        desc:"Idempotency keys, double-spend prevention, saga pattern, distributed ledger.",
+        links:[
+          {t:"📹 Payment System Design",u:"https://youtu.be/olfaBgJrUBI",lt:"video"},
+          {t:"📖 Stripe Engineering Blog",u:"https://stripe.com/blog/engineering",lt:"blog"},
+        ]},
+      { ico:"🔍", name:"Search Engine (Google Search)",
+        desc:"Web crawler, inverted index, TF-IDF, PageRank, serving layer.",
+        links:[
+          {t:"📹 Search Engine Design (Gaurav Sen)",u:"https://youtu.be/0LTXCcVRQi0",lt:"video"},
+          {t:"📖 Google Research Papers",u:"https://research.google/pubs",lt:"blog"},
+        ]},
+      { ico:"📨", name:"Distributed Message Queue (Kafka)",
+        desc:"Partitions, consumer groups, log compaction, exactly-once semantics.",
+        links:[
+          {t:"📹 Kafka Architecture Deep Dive",u:"https://youtu.be/Ch5VhJzaoaI",lt:"video"},
+          {t:"📖 Kafka Definitive Guide (Free)",u:"https://www.confluent.io/resources/kafka-the-definitive-guide",lt:"blog"},
+        ]},
+      { ico:"💰", name:"Distributed Transactions",
+        desc:"2-Phase Commit, Saga pattern, compensating transactions, CQRS + Event Sourcing.",
+        links:[
+          {t:"📹 Distributed Transactions (Hussain Nasser)",u:"https://youtu.be/S4FnmSeRpAY",lt:"video"},
+          {t:"📖 Saga Pattern — microservices.io",u:"https://microservices.io/patterns/data/saga.html",lt:"blog"},
+        ]},
+    ]
+  },
+  {
+    phase:"Phase 6 — Distributed Systems Deep Dive", icon:"🌍", badge:"Advanced", badgeCls:"diff-a",
+    sub:"Internals of databases, consensus, and large-scale infrastructure.",
+    items:[
+      { ico:"📖", name:"Designing Data-Intensive Applications",
+        desc:"The bible of distributed systems. Replication, partitioning, transactions, consensus.",
+        links:[
+          {t:"📹 DDIA Book Summary",u:"https://youtu.be/PdtlXdse7pw",lt:"video"},
+          {t:"📖 DDIA — Martin Kleppmann",u:"https://dataintensive.net",lt:"blog"},
+          {t:"📖 DDIA Notes (GitHub)",u:"https://github.com/donnemartin/system-design-primer",lt:"github"},
+        ]},
+      { ico:"🗳️", name:"Consensus: Raft & Paxos",
+        desc:"Leader election, log replication, split-brain prevention.",
+        links:[
+          {t:"📹 Raft Consensus (MIT 6.824)",u:"https://youtu.be/64Zp3tzNbpE",lt:"video"},
+          {t:"📖 The Raft Paper",u:"https://raft.github.io/raft.pdf",lt:"blog"},
+          {t:"🎮 Raft Visualization",u:"https://raft.github.io",lt:"blog"},
+        ]},
+      { ico:"🕰️", name:"Clocks & Ordering (Vector Clocks)",
+        desc:"Logical clocks, Lamport timestamps, vector clocks, causality.",
+        links:[
+          {t:"📹 Distributed Clocks (Martin Kleppmann)",u:"https://youtu.be/FQ_2N3AoinU",lt:"video"},
+          {t:"📖 Lamport Clock Paper",u:"https://lamport.azurewebsites.net/pubs/time-clocks.pdf",lt:"blog"},
+        ]},
+      { ico:"🏛️", name:"Storage Engines (LSM vs B-Tree)",
+        desc:"How RocksDB, Cassandra (LSM) vs MySQL, Postgres (B-Tree) work internally.",
+        links:[
+          {t:"📹 LSM Tree (Hussein Nasser)",u:"https://youtu.be/I6jB0nM9SKU",lt:"video"},
+          {t:"📖 DDIA Chapter 3",u:"https://dataintensive.net",lt:"blog"},
+        ]},
+    ]
+  },
 ];
 
-const interviewQuestions = [
-  { id:1, text:"Design a URL shortener like bit.ly. How would you handle 1 billion URLs?", type:"HLD", freq:5, topic:"URL Shortener", companies:["Amazon","Google","Uber"] },
-  { id:2, text:"How would you design Twitter's home timeline? How do you handle celebrity accounts with millions of followers?", type:"HLD", freq:5, topic:"Social Feed", companies:["Twitter","Meta","LinkedIn"] },
-  { id:3, text:"Design a distributed cache. How do you handle cache invalidation and eviction?", type:"HLD", freq:5, topic:"Caching", companies:["Amazon","Google","Meta"] },
-  { id:4, text:"How would you design WhatsApp? How does message delivery work offline?", type:"HLD", freq:5, topic:"Chat System", companies:["Meta","Microsoft","Slack"] },
-  { id:5, text:"Design Netflix's video streaming service. How do you ensure low latency globally?", type:"HLD", freq:5, topic:"Video Streaming", companies:["Netflix","YouTube","Amazon"] },
-  { id:6, text:"How do you design a rate limiter? Explain token bucket vs sliding window algorithms.", type:"HLD", freq:5, topic:"Rate Limiting", companies:["Stripe","Cloudflare","Google"] },
-  { id:7, text:"Design Uber's ride-matching system. How do you find nearby drivers efficiently?", type:"HLD", freq:5, topic:"Uber / Geo", companies:["Uber","Lyft","DoorDash"] },
-  { id:8, text:"How would you design a notification system to send 1 million push notifications per second?", type:"HLD", freq:4, topic:"Notifications", companies:["Apple","Google","Meta"] },
-  { id:9, text:"Explain consistent hashing. Why is it used in distributed systems?", type:"HLD", freq:5, topic:"Consistent Hashing", companies:["Amazon","Google","Cassandra"] },
-  { id:10, text:"How does a message queue like Kafka work? When would you use it vs a database?", type:"HLD", freq:5, topic:"Message Queue", companies:["LinkedIn","Uber","Netflix"] },
-  { id:11, text:"Design Google Search's autocomplete feature. How do you handle real-time suggestions?", type:"HLD", freq:4, topic:"Typeahead Search", companies:["Google","Amazon","Twitter"] },
-  { id:12, text:"How would you design a payment system? How do you prevent double charges?", type:"HLD", freq:4, topic:"Payment System", companies:["Stripe","PayPal","Amazon"] },
-  { id:13, text:"What is the CAP theorem? Give real-world examples of each trade-off.", type:"HLD", freq:5, topic:"CAP / Distributed", companies:["All FAANG","Stripe"] },
-  { id:14, text:"How do you shard a database? What is the difference between range-based and hash-based sharding?", type:"HLD", freq:5, topic:"Database Sharding", companies:["Amazon","Uber","Airbnb"] },
-  { id:15, text:"Design Google Docs with real-time collaboration. How do you handle conflicting edits?", type:"HLD", freq:4, topic:"Collaborative Editor", companies:["Google","Microsoft","Notion"] },
-  { id:16, text:"Design an LRU Cache. Implement it with O(1) get and put operations.", type:"LLD", freq:5, topic:"LRU Cache", companies:["Google","Amazon","Meta"] },
-  { id:17, text:"Design a parking lot system. What classes and relationships would you model?", type:"LLD", freq:5, topic:"Parking Lot", companies:["Amazon","Microsoft","Uber"] },
-  { id:18, text:"Explain SOLID principles with code examples. How does Dependency Inversion work?", type:"LLD", freq:5, topic:"SOLID", companies:["All FAANG","Atlassian"] },
-  { id:19, text:"Design an elevator scheduling system. How do you minimize wait time?", type:"LLD", freq:4, topic:"Elevator System", companies:["Amazon","Google","Microsoft"] },
-  { id:20, text:"Design a vending machine. How do you model the state transitions?", type:"LLD", freq:4, topic:"Vending Machine", companies:["Amazon","Uber","Google"] },
-  { id:21, text:"How would you design the Splitwise app? How do you simplify debts in a group?", type:"LLD", freq:4, topic:"Splitwise", companies:["Airbnb","Uber","Amazon"] },
-  { id:22, text:"Design the Observer pattern. How is it different from a message queue?", type:"LLD", freq:4, topic:"Design Patterns", companies:["All FAANG","Salesforce"] },
-  { id:23, text:"Design a Chess game. How do you validate moves and detect checkmate?", type:"LLD", freq:3, topic:"Chess", companies:["Amazon","Google","Microsoft"] },
-  { id:24, text:"What is the difference between a process and a thread? How do you handle concurrency in LLD?", type:"LLD", freq:4, topic:"Concurrency", companies:["All FAANG","Microsoft"] },
-  { id:25, text:"Design BookMyShow's seat booking. How do you prevent two users from booking the same seat?", type:"LLD", freq:4, topic:"Ticket Booking", companies:["BookMyShow","Ticketmaster","Amazon"] },
+// ─────────────────────────────────────────────────────────────
+const HLD_TOPICS = [
+  {id:"h1", ico:"🔗", name:"URL Shortener",         imp:"critical", cos:["Amazon","Google","Uber","Microsoft"],
+   desc:"Base62 encoding, KV store for redirects, analytics, custom aliases, expiry",
+   links:[{t:"ByteByteGo Video",u:"https://youtu.be/JQDHz72LtRQ"},{t:"Grokking TinyURL",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR"}]},
+  {id:"h2", ico:"🐦", name:"Twitter / Social Feed",  imp:"critical", cos:["Twitter","Meta","LinkedIn","Snap"],
+   desc:"Fanout on write vs read, celebrity problem, Redis sorted sets for timeline",
+   links:[{t:"ByteByteGo Video",u:"https://youtu.be/wYk0xPP_P_8"},{t:"Grokking Twitter",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m2G48X18NDO"}]},
+  {id:"h3", ico:"▶️", name:"YouTube / Video Streaming", imp:"critical", cos:["Netflix","YouTube","Amazon","Disney+"],
+   desc:"HLS/DASH adaptive bitrate, transcoding pipeline, CDN edge delivery, S3 storage",
+   links:[{t:"Netflix Architecture",u:"https://youtu.be/psQzyFfsUGU"},{t:"Grokking YouTube",u:"https://www.educative.io/courses/grokking-the-system-design-interview/xV26VjZ7yMl"}]},
+  {id:"h4", ico:"💬", name:"WhatsApp / Chat System",  imp:"critical", cos:["WhatsApp","Slack","Discord","Telegram"],
+   desc:"WebSocket, offline delivery, message ordering, E2E encryption, Cassandra",
+   links:[{t:"ByteByteGo Chat",u:"https://youtu.be/vvhC64hQZMk"},{t:"Designing WhatsApp",u:"https://medium.com/swlh/design-a-chat-system-f20a9e0ff1e3"}]},
+  {id:"h5", ico:"🚗", name:"Uber / Ride Sharing",     imp:"critical", cos:["Uber","Lyft","Ola","DoorDash"],
+   desc:"Geohash geo-indexing, real-time driver location, ETA, matching, surge pricing",
+   links:[{t:"Gaurav Sen Video",u:"https://youtu.be/umWABit-wbk"},{t:"Uber Engineering Blog",u:"https://eng.uber.com"}]},
+  {id:"h6", ico:"🚦", name:"Rate Limiter",            imp:"critical", cos:["Stripe","Cloudflare","Google","Amazon"],
+   desc:"Token bucket, sliding window log, sliding window counter, Redis + Lua atomic ops",
+   links:[{t:"ByteByteGo Rate Limiter",u:"https://youtu.be/FU4WlwfS3G0"},{t:"System Design Rate Limiter",u:"https://medium.com/@saurabh.codes/system-design-rate-limiter-1e89a4a66a32"}]},
+  {id:"h7", ico:"⚡", name:"Distributed Cache (Redis)", imp:"critical", cos:["Amazon","Google","Meta","Netflix"],
+   desc:"Eviction (LRU/LFU), consistent hashing for cache nodes, write policies, hot keys",
+   links:[{t:"Redis Architecture",u:"https://youtu.be/OqCK95AS-YE"},{t:"Distributed Cache Design",u:"https://medium.com/system-design-blog/distributed-cache-system-design"}]},
+  {id:"h8", ico:"📨", name:"Message Queue (Kafka)",    imp:"critical", cos:["LinkedIn","Uber","Netflix","Airbnb"],
+   desc:"Partitions, consumer groups, log compaction, at-least-once vs exactly-once",
+   links:[{t:"Kafka Deep Dive",u:"https://youtu.be/Ch5VhJzaoaI"},{t:"Kafka Definitive Guide",u:"https://www.confluent.io/resources/kafka-the-definitive-guide"}]},
+  {id:"h9", ico:"🔄", name:"Consistent Hashing",      imp:"critical", cos:["Amazon","Google","Cassandra","Redis"],
+   desc:"Hash ring, virtual nodes, minimal data movement on add/remove server",
+   links:[{t:"ByteByteGo Consistent Hashing",u:"https://youtu.be/UF9WA4k-iDM"},{t:"Consistent Hashing Explained",u:"https://medium.com/system-design-blog/consistent-hashing-a296b46e9c7f"}]},
+  {id:"h10",ico:"📐", name:"CAP Theorem / BASE / ACID", imp:"critical", cos:["All FAANG","Stripe","Cloudflare"],
+   desc:"C/A/P tradeoffs, CP vs AP systems, eventual consistency, MongoDB vs Cassandra",
+   links:[{t:"CAP Theorem (ByteByteGo)",u:"https://youtu.be/BHqjEjzAicA"},{t:"CAP FAQ",u:"https://www.cl.cam.ac.uk/research/dtg/archived/files/publications/public/mk428/cap-critique.pdf"}]},
+  {id:"h11",ico:"🗃️", name:"Database Sharding",        imp:"critical", cos:["Amazon","Uber","Airbnb","Pinterest"],
+   desc:"Range vs hash sharding, hot spots, cross-shard queries, resharding strategy",
+   links:[{t:"Sharding (ByteByteGo)",u:"https://youtu.be/5faMjKuB9bc"},{t:"Database Sharding Guide",u:"https://medium.com/system-design-blog/database-sharding"}]},
+  {id:"h12",ico:"🔀", name:"API Gateway / Load Balancer", imp:"critical", cos:["Amazon","Netflix","Uber","Cloudflare"],
+   desc:"L4 vs L7 LB, round-robin, least connections, health checks, reverse proxy",
+   links:[{t:"Load Balancing (ByteByteGo)",u:"https://youtu.be/K0Ta65OqQkY"},{t:"API Gateway Design",u:"https://medium.com/system-design-blog/api-gateway-design"}]},
+  {id:"h13",ico:"📸", name:"Instagram / Photo Sharing",  imp:"high", cos:["Meta","Pinterest","Snap","Twitter"],
+   desc:"Object storage (S3), CDN for images, feed generation, follow graph sharding",
+   links:[{t:"Instagram Architecture",u:"https://youtu.be/hnpzNAPiC0E"},{t:"Grokking Instagram",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m22LWKgXOEm"}]},
+  {id:"h14",ico:"🛒", name:"Amazon / E-Commerce",         imp:"high", cos:["Amazon","Flipkart","Shopify","eBay"],
+   desc:"Product catalog, inventory, cart, order service, payment, search",
+   links:[{t:"E-Commerce Design",u:"https://youtu.be/EpASu_1dUdE"},{t:"Amazon Architecture Blog",u:"https://www.allthingsdistributed.com"}]},
+  {id:"h15",ico:"🔔", name:"Notification System",         imp:"high", cos:["Apple","Google","Meta","Slack"],
+   desc:"APNs/FCM gateways, priority queues, user preferences, retry, fan-out",
+   links:[{t:"Notification System (ByteByteGo)",u:"https://youtu.be/bBTPZ9NdSk8"},{t:"Notification Design",u:"https://medium.com/nerd-for-tech/system-design-notification-system"}]},
+  {id:"h16",ico:"📍", name:"Google Maps / Location",       imp:"high", cos:["Google","Uber","DoorDash","Lyft"],
+   desc:"Geohash / S2 cells, routing algorithms, ETA prediction, map tiles",
+   links:[{t:"Google Maps Design",u:"https://youtu.be/jk3yvVfNvds"},{t:"Geospatial Indexing",u:"https://medium.com/@narengowda/designing-google-maps-a66e24e3e3c0"}]},
+  {id:"h17",ico:"🗄️", name:"Distributed File Storage (S3)", imp:"high", cos:["Amazon","Google","Dropbox","Box"],
+   desc:"Object storage, chunking, erasure coding, deduplication, eventual consistency",
+   links:[{t:"Dropbox Design (Gaurav Sen)",u:"https://youtu.be/U0xTu6E2CT8"},{t:"Grokking Dropbox",u:"https://www.educative.io/courses/grokking-the-system-design-interview/gxMDOe16mql"}]},
+  {id:"h18",ico:"✏️", name:"Search Autocomplete",           imp:"high", cos:["Google","Amazon","Twitter","LinkedIn"],
+   desc:"Trie, top-k suggestions per prefix, Kafka for frequency, Redis sorted sets",
+   links:[{t:"Typeahead (ByteByteGo)",u:"https://youtu.be/9jFpzpLHFcA"},{t:"Grokking Typeahead",u:"https://www.educative.io/courses/grokking-the-system-design-interview/mE2XkgGRnmp"}]},
+  {id:"h19",ico:"🎟️", name:"Ticketmaster / Event Booking",  imp:"high", cos:["Ticketmaster","BookMyShow","Amazon"],
+   desc:"Seat reservation, concurrency with locks, payment, waiting room queue",
+   links:[{t:"Ticketmaster Design",u:"https://youtu.be/lBAwJgoO3Ek"},{t:"Ticketmaster LLD",u:"https://medium.com/@liamchzh/system-design-ticketmaster"}]},
+  {id:"h20",ico:"📄", name:"Google Docs / Collaborative Editor", imp:"high", cos:["Google","Microsoft","Notion","Atlassian"],
+   desc:"Operational Transformation or CRDT, real-time sync, conflict resolution",
+   links:[{t:"Google Docs Architecture",u:"https://youtu.be/2auwirNBvGg"},{t:"OT & CRDT Deep Dive",u:"https://medium.com/system-design-blog/google-docs-system-design"}]},
+  {id:"h21",ico:"💳", name:"Payment System",                 imp:"high", cos:["Stripe","PayPal","Razorpay","Square"],
+   desc:"Idempotency keys, ledger design, saga pattern for rollbacks, PCI-DSS",
+   links:[{t:"Payment System Design",u:"https://youtu.be/olfaBgJrUBI"},{t:"Stripe Engineering Blog",u:"https://stripe.com/blog/engineering"}]},
+  {id:"h22",ico:"🆔", name:"Distributed ID Generator",       imp:"high", cos:["Twitter","Instagram","Uber","Discord"],
+   desc:"Snowflake ID, UUID v4/v7, sonyflake, monotonic IDs, clock skew",
+   links:[{t:"Unique ID (ByteByteGo)",u:"https://youtu.be/lfhGHm2DcME"},{t:"Twitter Snowflake",u:"https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake"}]},
+  {id:"h23",ico:"⚠️", name:"Circuit Breaker / Resiliency",   imp:"high", cos:["Netflix","Amazon","Uber","Microsoft"],
+   desc:"Hystrix, retry with backoff, bulkhead, timeout, fallback patterns",
+   links:[{t:"Circuit Breaker Pattern",u:"https://youtu.be/ADHjZe4JZp4"},{t:"Netflix Hystrix",u:"https://github.com/Netflix/Hystrix/wiki"}]},
+  {id:"h24",ico:"🌐", name:"CDN",                             imp:"high", cos:["Cloudflare","Amazon","Netflix","Akamai"],
+   desc:"Push vs pull CDN, edge PoPs, cache invalidation, origin shield",
+   links:[{t:"CDN (Fireship)",u:"https://youtu.be/RI9np1LWzqw"},{t:"How CDN Works",u:"https://www.cloudflare.com/learning/cdn/what-is-a-cdn"}]},
+  {id:"h25",ico:"🎯", name:"Recommendation Engine",          imp:"medium", cos:["Netflix","Spotify","Amazon","YouTube"],
+   desc:"Collaborative filtering, content-based, matrix factorization, feature pipeline",
+   links:[{t:"Recommendation System",u:"https://youtu.be/n3RKsY2H-NE"},{t:"Netflix Personalization",u:"https://netflixtechblog.com/system-architectures-for-personalization-and-recommendation-e081aa94b5d8"}]},
+  {id:"h26",ico:"🕷️", name:"Web Crawler",                    imp:"medium", cos:["Google","Amazon","Bing"],
+   desc:"BFS/DFS traversal, politeness, deduplication with Bloom filter, URL frontier",
+   links:[{t:"Web Crawler (ByteByteGo)",u:"https://youtu.be/BKZxZwUgL3Y"},{t:"Grokking Web Crawler",u:"https://www.educative.io/courses/grokking-the-system-design-interview/NE5LpPrWrKv"}]},
+  {id:"h27",ico:"📈", name:"Metrics & Logging System",        imp:"medium", cos:["Datadog","Splunk","Netflix","Uber"],
+   desc:"Time-series DB, aggregation pipeline, alerting, distributed tracing (Jaeger)",
+   links:[{t:"Metrics System Design",u:"https://youtu.be/kIcq1_pBQSY"},{t:"Distributed Logging",u:"https://medium.com/@pankaj.itdeveloper/distributed-logging-system-design"}]},
+  {id:"h28",ico:"💱", name:"Distributed Transactions (Saga/2PC)", imp:"high", cos:["Amazon","Stripe","Airbnb"],
+   desc:"Two-phase commit, saga choreography vs orchestration, compensating transactions",
+   links:[{t:"Distributed Transactions",u:"https://youtu.be/S4FnmSeRpAY"},{t:"Saga Pattern",u:"https://microservices.io/patterns/data/saga.html"}]},
 ];
 
-// ===================== STATE =====================
-let progress = {};
-let customLinks = {};
-let currentFilterStatus = 'all';
-let currentFilterType = 'all';
-let currentSearch = '';
-let currentQType = 'all';
-let currentQSearch = '';
-let addLinkTarget = null;
+const LLD_TOPICS = [
+  {id:"l1", ico:"💾", name:"LRU Cache",              imp:"critical", cos:["Google","Amazon","Meta","Microsoft"],
+   desc:"HashMap + DLL, O(1) get/put, eviction, thread-safe variant",
+   links:[{t:"Nick White LRU Video",u:"https://youtu.be/S6IfqDXWa10"},{t:"LRU Implementation",u:"https://medium.com/@pankaj.itdeveloper/lru-cache-implementation"}]},
+  {id:"l2", ico:"🔩", name:"SOLID Principles",       imp:"critical", cos:["All FAANG","Atlassian","Microsoft"],
+   desc:"SRP, OCP, LSP, ISP, DIP — with real-world code examples",
+   links:[{t:"SOLID (ArjanCodes)",u:"https://youtu.be/pTB0EiLXUC8"},{t:"SOLID — DigitalOcean",u:"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design"}]},
+  {id:"l3", ico:"🏭", name:"Design Patterns (GoF)",  imp:"critical", cos:["All FAANG","Salesforce","Atlassian"],
+   desc:"All 23 Gang of Four patterns — creational, structural, behavioural",
+   links:[{t:"Refactoring.Guru",u:"https://refactoring.guru/design-patterns"},{t:"Christopher Okhravi (YouTube)",u:"https://youtube.com/playlist?list=PLrhzvIcii6GNjpARjnq4yD3HHUnTSN5pC"}]},
+  {id:"l4", ico:"🅿️", name:"Parking Lot System",    imp:"high", cos:["Amazon","Microsoft","Uber"],
+   desc:"Singleton, Strategy (pricing), multiple vehicle types, tickets, floors",
+   links:[{t:"Parking Lot Video",u:"https://youtu.be/DSGsa0pu8-k"},{t:"Parking Lot Guide",u:"https://medium.com/nerd-for-tech/low-level-design-of-a-parking-lot-system-58e2a34e05c4"}]},
+  {id:"l5", ico:"🛗", name:"Elevator System",        imp:"high", cos:["Amazon","Google","Microsoft"],
+   desc:"SCAN algorithm, State machine (IDLE/UP/DOWN), request scheduling",
+   links:[{t:"Elevator LLD Video",u:"https://youtu.be/siqiJAJWUVA"},{t:"Elevator LLD Guide",u:"https://medium.com/nerd-for-tech/object-oriented-design-of-an-elevator-system-in-java-ef21f47df69f"}]},
+  {id:"l6", ico:"🏧", name:"ATM System",             imp:"high", cos:["Amazon","Google","IBM"],
+   desc:"State machine (Idle→Card→Pin→Amount→Dispense), card, account, transactions",
+   links:[{t:"ATM LLD Video",u:"https://youtu.be/vJkDzFnRJr4"},{t:"ATM LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-atm-machine"}]},
+  {id:"l7", ico:"🥤", name:"Vending Machine",        imp:"high", cos:["Amazon","Google","Uber"],
+   desc:"State pattern, inventory management, payment processing, change dispensing",
+   links:[{t:"Vending Machine Video",u:"https://youtu.be/DCCo8mDkMoU"},{t:"Vending Machine Guide",u:"https://medium.com/nerd-for-tech/low-level-design-vending-machine"}]},
+  {id:"l8", ico:"♟️", name:"Chess / Board Game",     imp:"high", cos:["Amazon","Google","Microsoft"],
+   desc:"Polymorphic pieces, move validation, check/checkmate detection, game state",
+   links:[{t:"Chess LLD Video",u:"https://youtu.be/3HHivbOHMDs"},{t:"Chess LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-of-chess-game"}]},
+  {id:"l9", ico:"💰", name:"Splitwise",              imp:"high", cos:["Airbnb","Uber","Amazon"],
+   desc:"Group expenses, equal/exact/percentage splits, debt simplification algorithm",
+   links:[{t:"Splitwise Video",u:"https://youtu.be/rMnf-rA_FpM"},{t:"Splitwise LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-splitwise"}]},
+  {id:"l10",ico:"🎬", name:"Movie Ticket Booking",   imp:"high", cos:["BookMyShow","Ticketmaster","Fandango"],
+   desc:"Theatre/show/seat hierarchy, concurrent seat locking, payment, optimistic locking",
+   links:[{t:"BookMyShow Video",u:"https://youtu.be/lBAwJgoO3Ek"},{t:"BookMyShow LLD",u:"https://medium.com/nerd-for-tech/design-bookmyshow-low-level-design"}]},
+  {id:"l11",ico:"🏨", name:"Hotel Booking",          imp:"high", cos:["Booking.com","Airbnb","Expedia"],
+   desc:"Room availability, date range queries, concurrent booking, strategy pricing",
+   links:[{t:"Hotel Booking Video",u:"https://youtu.be/hJPjADJ1_JM"},{t:"Hotel Booking LLD",u:"https://medium.com/nerd-for-tech/low-level-design-hotel-booking"}]},
+  {id:"l12",ico:"🍕", name:"Food Delivery (Swiggy/Zomato)", imp:"high", cos:["Swiggy","Zomato","DoorDash","Uber Eats"],
+   desc:"Restaurant, menu, cart, order lifecycle, delivery agent assignment",
+   links:[{t:"Food Delivery LLD",u:"https://youtu.be/iJLD4TAIvpM"},{t:"Food Delivery Guide",u:"https://medium.com/nerd-for-tech/low-level-design-food-delivery"}]},
+  {id:"l13",ico:"👁️", name:"Observer Pattern",       imp:"critical", cos:["All FAANG","Salesforce","SAP"],
+   desc:"Subject notifies observers, event bus, decoupled pub-sub in-process",
+   links:[{t:"Observer (Christopher Okhravi)",u:"https://youtu.be/_BpmfnqjgzQ"},{t:"Observer — Refactoring.Guru",u:"https://refactoring.guru/design-patterns/observer"}]},
+  {id:"l14",ico:"♟️", name:"Strategy Pattern",        imp:"critical", cos:["All FAANG","Stripe","Atlassian"],
+   desc:"Swap algorithms at runtime, payment strategies, sorting strategies",
+   links:[{t:"Strategy (Christopher Okhravi)",u:"https://youtu.be/v9ejT8FO-7I"},{t:"Strategy — Refactoring.Guru",u:"https://refactoring.guru/design-patterns/strategy"}]},
+  {id:"l15",ico:"🔄", name:"State Pattern",           imp:"critical", cos:["Amazon","Google","Microsoft"],
+   desc:"Object behaviour changes with state, FSM, vending machine, ATM, order lifecycle",
+   links:[{t:"State (Christopher Okhravi)",u:"https://youtu.be/N12L5D78MAA"},{t:"State — Refactoring.Guru",u:"https://refactoring.guru/design-patterns/state"}]},
+  {id:"l16",ico:"🧵", name:"Concurrency & Thread Safety", imp:"high", cos:["All FAANG","Microsoft"],
+   desc:"Race conditions, deadlocks, mutex, semaphore, ReentrantLock, ThreadLocal",
+   links:[{t:"Java Concurrency (Amigoscode)",u:"https://youtu.be/d9s_d28yJq0"},{t:"JCIP Book",u:"https://jcip.net"}]},
+  {id:"l17",ico:"📋", name:"Library Management System", imp:"medium", cos:["Amazon","Google","Microsoft"],
+   desc:"Books, members, lending, fines, reservations, search by author/ISBN",
+   links:[{t:"Library LLD Video",u:"https://youtu.be/q6CjxMQE5_Q"},{t:"Library LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-library-management-system"}]},
+  {id:"l18",ico:"🏏", name:"Cricinfo / Live Score",   imp:"medium", cos:["Amazon","Google","ESPN"],
+   desc:"Match, innings, over, players, live updates, scorecard, commentary",
+   links:[{t:"Cricket LLD Video",u:"https://youtu.be/6PEE4zDRnUI"},{t:"Cricket LLD Guide",u:"https://medium.com/nerd-for-tech/low-level-design-cricinfo"}]},
+];
 
-// Load from localStorage
-function loadState() {
-  try {
-    const saved = localStorage.getItem('sysdesign-progress');
-    if (saved) progress = JSON.parse(saved);
-    const savedLinks = localStorage.getItem('sysdesign-links');
-    if (savedLinks) customLinks = JSON.parse(savedLinks);
-  } catch(e) {}
-}
+const PATTERNS = [
+  // ── FUNDAMENTALS ─────────────────────────────────────────────────────────
+  {id:"f1",ico:"🏗️",name:"OOP — 4 Pillars",               cat:"Fundamentals",imp:"critical",
+   idea:"Encapsulation, Abstraction, Inheritance, Polymorphism. Foundation of every LLD interview.",
+   links:[
+     {t:"📹 OOP in 7 min (Fireship)",           u:"https://youtu.be/pTB0EiLXUC8"},
+     {t:"📹 OOP Full Course (Programming w/ Mosh)",u:"https://youtu.be/GhctmPNv2go"},
+     {t:"📖 Baeldung — OOP Concepts",           u:"https://www.baeldung.com/java-oop"},
+     {t:"📖 GeeksForGeeks OOP Primer",           u:"https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/"},
+   ]},
+  {id:"f2",ico:"🔩",name:"SOLID Principles",                cat:"Fundamentals",imp:"critical",
+   idea:"SRP, OCP, LSP, ISP, DIP. 5 rules for clean, maintainable, extensible OOP code.",
+   links:[
+     {t:"📹 SOLID in 12 min (ArjanCodes)",       u:"https://youtu.be/pTB0EiLXUC8"},
+     {t:"📹 SOLID Deep Dive (Amigoscode)",        u:"https://youtu.be/rtmFCcjEgEw"},
+     {t:"📖 DigitalOcean SOLID Guide",            u:"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design"},
+     {t:"📖 Baeldung SOLID",                      u:"https://www.baeldung.com/solid-principles"},
+     {t:"📖 Refactoring.Guru SOLID",              u:"https://refactoring.guru/refactoring/what-is-refactoring"},
+   ]},
+  {id:"f3",ico:"🧩",name:"Composition over Inheritance",    cat:"Fundamentals",imp:"high",
+   idea:"Prefer has-a over is-a. More flexible. Avoids brittle deep class hierarchies.",
+   links:[
+     {t:"📹 Composition vs Inheritance (Web Dev Simplified)",u:"https://youtu.be/wfMtDGfHWpA"},
+     {t:"📖 Head First Design Patterns — Ch.1",  u:"https://www.oreilly.com/library/view/head-first-design/0596007124"},
+     {t:"📖 Medium — Composition over Inheritance",u:"https://medium.com/better-programming/composition-over-inheritance-the-fundamental-difference-d51eddbbba59"},
+   ]},
+  {id:"f4",ico:"📐",name:"UML Class Diagrams",              cat:"Fundamentals",imp:"high",
+   idea:"Draw classes, interfaces, and relationships before writing a single line of code.",
+   links:[
+     {t:"📹 UML Class Diagrams (Lucidchart)",     u:"https://youtu.be/UI6lqHOVHic"},
+     {t:"📹 UML in 10 min (Derek Banas)",          u:"https://youtu.be/OkC7HKtiZC0"},
+     {t:"📖 Visual Paradigm — UML Tutorial",      u:"https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial"},
+     {t:"📖 IBM — UML Basics",                    u:"https://developer.ibm.com/articles/the-class-diagram"},
+   ]},
+  {id:"f5",ico:"🔀",name:"Interfaces vs Abstract Classes",  cat:"Fundamentals",imp:"critical",
+   idea:"Interface = contract, supports multiple. Abstract = partial implementation. Know when to use each.",
+   links:[
+     {t:"📹 Interface vs Abstract (Telusko)",     u:"https://youtu.be/7tS4ql6GQWI"},
+     {t:"📖 Baeldung — Interface vs Abstract",    u:"https://www.baeldung.com/java-interface-vs-abstract-class"},
+     {t:"📖 GeeksForGeeks Deep Dive",             u:"https://www.geeksforgeeks.org/difference-between-abstract-class-and-interface-in-java/"},
+   ]},
+  {id:"f6",ico:"⚙️",name:"Concurrency & Thread Safety",     cat:"Fundamentals",imp:"high",
+   idea:"Race conditions, deadlocks, mutex, semaphore, ReentrantLock, ThreadLocal, immutability.",
+   links:[
+     {t:"📹 Java Concurrency (Amigoscode)",       u:"https://youtu.be/d9s_d28yJq0"},
+     {t:"📹 Concurrency in 20 min (Fireship)",    u:"https://youtu.be/ZoqgAy3h4OM"},
+     {t:"📖 JCIP — Java Concurrency in Practice", u:"https://jcip.net"},
+     {t:"📖 Baeldung Concurrency Guide",          u:"https://www.baeldung.com/java-concurrency"},
+   ]},
+  // ── CREATIONAL ────────────────────────────────────────────────────────────
+  {id:"c1",ico:"1️⃣",name:"Singleton",          cat:"Creational",imp:"critical",
+   idea:"One global instance. Thread-safe via enum or double-checked locking. Logger, Config, DB Pool.",
+   links:[
+     {t:"📹 Singleton (Christopher Okhravi)",     u:"https://youtu.be/hUE_j6q0LTQ"},
+     {t:"📹 Singleton — All variants (Derek Banas)",u:"https://youtu.be/-KCxJVW2pC0"},
+     {t:"📖 Refactoring.Guru — Singleton",        u:"https://refactoring.guru/design-patterns/singleton"},
+     {t:"📖 Baeldung — Java Singleton",           u:"https://www.baeldung.com/java-singleton"},
+     {t:"💻 Code Example (GitHub)",               u:"https://github.com/iluwatar/java-design-patterns/tree/master/singleton"},
+   ]},
+  {id:"c2",ico:"🏭",name:"Factory Method",      cat:"Creational",imp:"critical",
+   idea:"Let subclasses decide which object to create. Decouples instantiation from usage. Open/Closed.",
+   links:[
+     {t:"📹 Factory Method (Christopher Okhravi)",u:"https://youtu.be/EcFVTgRHJLM"},
+     {t:"📹 Factory in 5 min (Coding with John)", u:"https://youtu.be/EdFq_JIThqM"},
+     {t:"📖 Refactoring.Guru — Factory Method",   u:"https://refactoring.guru/design-patterns/factory-method"},
+     {t:"📖 Baeldung — Factory Pattern",          u:"https://www.baeldung.com/java-factory-pattern"},
+     {t:"💻 Code Example (GitHub)",               u:"https://github.com/iluwatar/java-design-patterns/tree/master/factory-method"},
+   ]},
+  {id:"c3",ico:"🏗️",name:"Abstract Factory",   cat:"Creational",imp:"high",
+   idea:"Factory of factories. Create families of related objects. Cross-platform UI toolkit example.",
+   links:[
+     {t:"📹 Abstract Factory (Christopher Okhravi)",u:"https://youtu.be/v-GiuMmsXj4"},
+     {t:"📹 Abstract Factory (Derek Banas)",        u:"https://youtu.be/MuCnHigB6qE"},
+     {t:"📖 Refactoring.Guru — Abstract Factory",   u:"https://refactoring.guru/design-patterns/abstract-factory"},
+     {t:"📖 Baeldung — Abstract Factory",            u:"https://www.baeldung.com/java-abstract-factory-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/abstract-factory"},
+   ]},
+  {id:"c4",ico:"🔨",name:"Builder",             cat:"Creational",imp:"critical",
+   idea:"Construct complex objects step by step. Fluent API. Avoids telescoping constructor anti-pattern.",
+   links:[
+     {t:"📹 Builder (Christopher Okhravi)",       u:"https://youtu.be/M7Xi1yO_s8E"},
+     {t:"📹 Builder Pattern (Coding with John)",  u:"https://youtu.be/to5qjafsfGQ"},
+     {t:"📖 Refactoring.Guru — Builder",          u:"https://refactoring.guru/design-patterns/builder"},
+     {t:"📖 Baeldung — Builder Pattern",          u:"https://www.baeldung.com/creational-design-patterns#builder"},
+     {t:"💻 Code Example (GitHub)",               u:"https://github.com/iluwatar/java-design-patterns/tree/master/builder"},
+   ]},
+  {id:"c5",ico:"🧬",name:"Prototype",           cat:"Creational",imp:"medium",
+   idea:"Clone existing objects instead of constructing from scratch. Shallow vs deep copy.",
+   links:[
+     {t:"📹 Prototype (Derek Banas)",              u:"https://youtu.be/AFbZhRL0Uz8"},
+     {t:"📹 Prototype Pattern (Aryan Programmer)", u:"https://youtu.be/DcFhITC9v0E"},
+     {t:"📖 Refactoring.Guru — Prototype",         u:"https://refactoring.guru/design-patterns/prototype"},
+     {t:"📖 Baeldung — Prototype",                 u:"https://www.baeldung.com/java-pattern-prototype"},
+     {t:"💻 Code Example (GitHub)",                u:"https://github.com/iluwatar/java-design-patterns/tree/master/prototype"},
+   ]},
+  {id:"c6",ico:"🏊",name:"Object Pool",         cat:"Creational",imp:"medium",
+   idea:"Reuse a fixed set of pre-created objects. Avoids expensive construction. DB connections, threads.",
+   links:[
+     {t:"📹 Object Pool Pattern (CodeVault)",      u:"https://youtu.be/iKPXHY0GqSU"},
+     {t:"📖 Baeldung — Object Pool",               u:"https://www.baeldung.com/java-object-pool-pattern"},
+     {t:"📖 Source Making — Object Pool",          u:"https://sourcemaking.com/design_patterns/object_pool"},
+     {t:"💻 Code Example (GitHub)",                u:"https://github.com/iluwatar/java-design-patterns/tree/master/object-pool"},
+   ]},
+  // ── STRUCTURAL ────────────────────────────────────────────────────────────
+  {id:"s1",ico:"🔌",name:"Adapter",             cat:"Structural",imp:"critical",
+   idea:"Convert an incompatible interface into the expected one. Wrap legacy or third-party classes.",
+   links:[
+     {t:"📹 Adapter (Christopher Okhravi)",        u:"https://youtu.be/2PKQtcJjYvc"},
+     {t:"📹 Adapter in 5 min (Coding with John)",  u:"https://youtu.be/wA3keqCeKtM"},
+     {t:"📖 Refactoring.Guru — Adapter",           u:"https://refactoring.guru/design-patterns/adapter"},
+     {t:"📖 Baeldung — Adapter Pattern",           u:"https://www.baeldung.com/java-adapter-pattern"},
+     {t:"💻 Code Example (GitHub)",                u:"https://github.com/iluwatar/java-design-patterns/tree/master/adapter"},
+   ]},
+  {id:"s2",ico:"🎁",name:"Decorator",           cat:"Structural",imp:"critical",
+   idea:"Add responsibilities to objects dynamically. Wrap in decorator objects. Java I/O streams.",
+   links:[
+     {t:"📹 Decorator (Christopher Okhravi)",      u:"https://youtu.be/GCraGHx6gso"},
+     {t:"📹 Decorator Pattern (Coding with John)", u:"https://youtu.be/v6tpISNjHf8"},
+     {t:"📖 Refactoring.Guru — Decorator",         u:"https://refactoring.guru/design-patterns/decorator"},
+     {t:"📖 Baeldung — Decorator Pattern",         u:"https://www.baeldung.com/java-decorator-pattern"},
+     {t:"💻 Code Example (GitHub)",                u:"https://github.com/iluwatar/java-design-patterns/tree/master/decorator"},
+   ]},
+  {id:"s3",ico:"🏠",name:"Facade",              cat:"Structural",imp:"critical",
+   idea:"Provide a simple interface to a complex subsystem. Hide internal complexity from clients.",
+   links:[
+     {t:"📹 Facade (Christopher Okhravi)",         u:"https://youtu.be/K4FkHVO5iac"},
+     {t:"📹 Facade Pattern (Derek Banas)",          u:"https://youtu.be/B1Y8fcYrz5o"},
+     {t:"📖 Refactoring.Guru — Facade",             u:"https://refactoring.guru/design-patterns/facade"},
+     {t:"📖 Baeldung — Facade Pattern",             u:"https://www.baeldung.com/java-facade-pattern"},
+     {t:"💻 Code Example (GitHub)",                 u:"https://github.com/iluwatar/java-design-patterns/tree/master/facade"},
+   ]},
+  {id:"s4",ico:"🪞",name:"Proxy",               cat:"Structural",imp:"high",
+   idea:"Surrogate for another object. Lazy init, access control, logging, caching proxy.",
+   links:[
+     {t:"📹 Proxy (Christopher Okhravi)",           u:"https://youtu.be/NwaabHqPwDI"},
+     {t:"📹 Proxy Pattern (Derek Banas)",            u:"https://youtu.be/cHg5bWW4nUI"},
+     {t:"📖 Refactoring.Guru — Proxy",              u:"https://refactoring.guru/design-patterns/proxy"},
+     {t:"📖 Baeldung — Proxy Pattern",              u:"https://www.baeldung.com/java-proxy-pattern"},
+     {t:"💻 Code Example (GitHub)",                 u:"https://github.com/iluwatar/java-design-patterns/tree/master/proxy"},
+   ]},
+  {id:"s5",ico:"🌳",name:"Composite",           cat:"Structural",imp:"high",
+   idea:"Treat individual and composed objects uniformly. Tree structures. File system, UI component trees.",
+   links:[
+     {t:"📹 Composite (Christopher Okhravi)",       u:"https://youtu.be/EWDmWbJ4wRA"},
+     {t:"📹 Composite Pattern (Derek Banas)",        u:"https://youtu.be/2HUnoKyC9l0"},
+     {t:"📖 Refactoring.Guru — Composite",          u:"https://refactoring.guru/design-patterns/composite"},
+     {t:"📖 Baeldung — Composite Pattern",          u:"https://www.baeldung.com/java-composite-pattern"},
+     {t:"💻 Code Example (GitHub)",                 u:"https://github.com/iluwatar/java-design-patterns/tree/master/composite"},
+   ]},
+  {id:"s6",ico:"🌉",name:"Bridge",              cat:"Structural",imp:"medium",
+   idea:"Decouple abstraction from implementation. Both can vary independently. Cross-platform rendering.",
+   links:[
+     {t:"📹 Bridge (Christopher Okhravi)",           u:"https://youtu.be/F1YQ7YRjttI"},
+     {t:"📹 Bridge Pattern (Derek Banas)",            u:"https://youtu.be/9jIgSX2sDwg"},
+     {t:"📖 Refactoring.Guru — Bridge",              u:"https://refactoring.guru/design-patterns/bridge"},
+     {t:"📖 Baeldung — Bridge Pattern",              u:"https://www.baeldung.com/java-bridge-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/bridge"},
+   ]},
+  {id:"s7",ico:"🪶",name:"Flyweight",           cat:"Structural",imp:"medium",
+   idea:"Share fine-grained objects to save memory. Intrinsic (shared) vs extrinsic (per-use) state.",
+   links:[
+     {t:"📹 Flyweight (Christopher Okhravi)",        u:"https://youtu.be/0vV-R2926ss"},
+     {t:"📹 Flyweight Pattern (Derek Banas)",         u:"https://youtu.be/qscOsQV-K14"},
+     {t:"📖 Refactoring.Guru — Flyweight",           u:"https://refactoring.guru/design-patterns/flyweight"},
+     {t:"📖 Baeldung — Flyweight",                   u:"https://www.baeldung.com/java-flyweight"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/flyweight"},
+   ]},
+  // ── BEHAVIOURAL ───────────────────────────────────────────────────────────
+  {id:"b1",ico:"👁️",name:"Observer",            cat:"Behavioural",imp:"critical",
+   idea:"Subject notifies subscribed observers when state changes. Foundation of event systems.",
+   links:[
+     {t:"📹 Observer (Christopher Okhravi)",         u:"https://youtu.be/_BpmfnqjgzQ"},
+     {t:"📹 Observer Pattern (Coding with John)",    u:"https://youtu.be/EacopFRKFtg"},
+     {t:"📖 Refactoring.Guru — Observer",            u:"https://refactoring.guru/design-patterns/observer"},
+     {t:"📖 Baeldung — Observer Pattern",            u:"https://www.baeldung.com/java-observer-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/observer"},
+   ]},
+  {id:"b2",ico:"♟️",name:"Strategy",             cat:"Behavioural",imp:"critical",
+   idea:"Define a family of algorithms, encapsulate each, make them interchangeable at runtime.",
+   links:[
+     {t:"📹 Strategy (Christopher Okhravi)",         u:"https://youtu.be/v9ejT8FO-7I"},
+     {t:"📹 Strategy Pattern (Coding with John)",    u:"https://youtu.be/Nrwj3gZiuJU"},
+     {t:"📖 Refactoring.Guru — Strategy",            u:"https://refactoring.guru/design-patterns/strategy"},
+     {t:"📖 Baeldung — Strategy Pattern",            u:"https://www.baeldung.com/java-strategy-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/strategy"},
+   ]},
+  {id:"b3",ico:"🔄",name:"State",                cat:"Behavioural",imp:"critical",
+   idea:"Allow object to change behaviour when internal state changes. Finite State Machine in OOP.",
+   links:[
+     {t:"📹 State (Christopher Okhravi)",            u:"https://youtu.be/N12L5D78MAA"},
+     {t:"📹 State Pattern (Derek Banas)",             u:"https://youtu.be/MGEx35FjBuo"},
+     {t:"📖 Refactoring.Guru — State",               u:"https://refactoring.guru/design-patterns/state"},
+     {t:"📖 Baeldung — State Pattern",               u:"https://www.baeldung.com/java-state-design-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/state"},
+   ]},
+  {id:"b4",ico:"📜",name:"Command",              cat:"Behavioural",imp:"high",
+   idea:"Encapsulate a request as an object. Enables undo/redo, queuing, logging. Text editor actions.",
+   links:[
+     {t:"📹 Command (Christopher Okhravi)",          u:"https://youtu.be/9qA5kw8dcSU"},
+     {t:"📹 Command Pattern (Derek Banas)",           u:"https://youtu.be/7Pj5kAhVBlg"},
+     {t:"📖 Refactoring.Guru — Command",             u:"https://refactoring.guru/design-patterns/command"},
+     {t:"📖 Baeldung — Command Pattern",             u:"https://www.baeldung.com/java-command-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/command"},
+   ]},
+  {id:"b5",ico:"📋",name:"Template Method",      cat:"Behavioural",imp:"high",
+   idea:"Define skeleton of algorithm in base class, let subclasses fill in the steps. Hollywood Principle.",
+   links:[
+     {t:"📹 Template Method (Christopher Okhravi)",  u:"https://youtu.be/7ocpwK9uesw"},
+     {t:"📹 Template Method (Derek Banas)",           u:"https://youtu.be/7ocpwK9uesw"},
+     {t:"📖 Refactoring.Guru — Template Method",     u:"https://refactoring.guru/design-patterns/template-method"},
+     {t:"📖 Baeldung — Template Method",             u:"https://www.baeldung.com/java-template-method-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/template-method"},
+   ]},
+  {id:"b6",ico:"🔁",name:"Iterator",             cat:"Behavioural",imp:"high",
+   idea:"Sequentially access elements of a collection without exposing its structure. Java Iterator.",
+   links:[
+     {t:"📹 Iterator (Christopher Okhravi)",         u:"https://youtu.be/uNTNEfwYXhI"},
+     {t:"📹 Iterator Pattern (Derek Banas)",          u:"https://youtu.be/VKIzUuMdmag"},
+     {t:"📖 Refactoring.Guru — Iterator",            u:"https://refactoring.guru/design-patterns/iterator"},
+     {t:"📖 Baeldung — Iterator Pattern",            u:"https://www.baeldung.com/java-iterator"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/iterator"},
+   ]},
+  {id:"b7",ico:"⛓️",name:"Chain of Responsibility",cat:"Behavioural",imp:"high",
+   idea:"Pass request along a chain of handlers. Each decides to process or pass on. Middleware, logging.",
+   links:[
+     {t:"📹 Chain of Responsibility (Christopher Okhravi)",u:"https://youtu.be/FafNcoBvVQo"},
+     {t:"📹 CoR Pattern (Derek Banas)",               u:"https://youtu.be/jDX6x8qmjbA"},
+     {t:"📖 Refactoring.Guru — Chain of Responsibility",u:"https://refactoring.guru/design-patterns/chain-of-responsibility"},
+     {t:"📖 Baeldung — CoR Pattern",                  u:"https://www.baeldung.com/chain-of-responsibility-pattern"},
+     {t:"💻 Code Example (GitHub)",                   u:"https://github.com/iluwatar/java-design-patterns/tree/master/chain-of-responsibility"},
+   ]},
+  {id:"b8",ico:"🕊️",name:"Mediator",             cat:"Behavioural",imp:"medium",
+   idea:"Centralise communication between objects. Reduces many-to-many coupling. Chat room example.",
+   links:[
+     {t:"📹 Mediator (Christopher Okhravi)",         u:"https://youtu.be/8DxIpdKd41A"},
+     {t:"📹 Mediator Pattern (Derek Banas)",          u:"https://youtu.be/8DxIpdKd41A"},
+     {t:"📖 Refactoring.Guru — Mediator",            u:"https://refactoring.guru/design-patterns/mediator"},
+     {t:"📖 Baeldung — Mediator Pattern",            u:"https://www.baeldung.com/java-mediator-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/mediator"},
+   ]},
+  {id:"b9",ico:"📸",name:"Memento",              cat:"Behavioural",imp:"medium",
+   idea:"Capture and restore object state without exposing internals. Undo functionality.",
+   links:[
+     {t:"📹 Memento (Christopher Okhravi)",          u:"https://youtu.be/jOnxYT8Iaoo"},
+     {t:"📹 Memento Pattern (Derek Banas)",           u:"https://youtu.be/-oyeaIirVC0"},
+     {t:"📖 Refactoring.Guru — Memento",             u:"https://refactoring.guru/design-patterns/memento"},
+     {t:"📖 Baeldung — Memento Pattern",             u:"https://www.baeldung.com/java-memento-design-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/memento"},
+   ]},
+  {id:"b10",ico:"🚶",name:"Visitor",             cat:"Behavioural",imp:"medium",
+   idea:"Add new operations to object structures without modifying them. Double dispatch.",
+   links:[
+     {t:"📹 Visitor (Christopher Okhravi)",          u:"https://youtu.be/TeZqKnC2gvA"},
+     {t:"📹 Visitor Pattern (Derek Banas)",           u:"https://youtu.be/pL4mOUDi54o"},
+     {t:"📖 Refactoring.Guru — Visitor",             u:"https://refactoring.guru/design-patterns/visitor"},
+     {t:"📖 Baeldung — Visitor Pattern",             u:"https://www.baeldung.com/java-visitor-design-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/visitor"},
+   ]},
+  {id:"b11",ico:"🗣️",name:"Interpreter",         cat:"Behavioural",imp:"low",
+   idea:"Define a grammar for a language, provide an interpreter to deal with it. SQL, regex parsing.",
+   links:[
+     {t:"📹 Interpreter (Derek Banas)",              u:"https://youtu.be/6CVymSJl8-4"},
+     {t:"📖 Refactoring.Guru — Interpreter",         u:"https://refactoring.guru/design-patterns/interpreter"},
+     {t:"📖 Baeldung — Interpreter",                 u:"https://www.baeldung.com/java-interpreter-pattern"},
+     {t:"💻 Code Example (GitHub)",                  u:"https://github.com/iluwatar/java-design-patterns/tree/master/interpreter"},
+   ]},
+];
 
-function saveState() {
-  try {
-    localStorage.setItem('sysdesign-progress', JSON.stringify(progress));
-    localStorage.setItem('sysdesign-links', JSON.stringify(customLinks));
-  } catch(e) {}
-}
+const PRACTICE = [
+  // BEGINNER LLD
+  {id:"pr1",ico:"❌",t:"LLD",diff:"Beginner",name:"Tic-Tac-Toe Game",
+   concepts:"Board NxN, players, win detection, draw, extensible design",
+   links:[{t:"Video",u:"https://youtu.be/BHZALtqAjeM"},{t:"Guide",u:"https://medium.com/nerd-for-tech/tic-tac-toe-lld"}]},
+  {id:"pr2",ico:"📝",t:"LLD",diff:"Beginner",name:"Logging System",
+   concepts:"Singleton logger, log levels (DEBUG/INFO/WARN/ERROR), file appender",
+   links:[{t:"Video",u:"https://youtu.be/4KiiaylZQcw"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-logger-system"}]},
+  {id:"pr3",ico:"🔢",t:"LLD",diff:"Beginner",name:"Calculator",
+   concepts:"Strategy pattern for operations, expression evaluation, extensibility",
+   links:[{t:"Guide",u:"https://medium.com/nerd-for-tech/calculator-lld"}]},
+  {id:"pr4",ico:"💾",t:"LLD",diff:"Beginner",name:"LRU Cache",
+   concepts:"HashMap + DLL, O(1) get/put, capacity eviction",
+   links:[{t:"Video",u:"https://youtu.be/S6IfqDXWa10"},{t:"LeetCode 146",u:"https://leetcode.com/problems/lru-cache"}]},
+  {id:"pr5",ico:"🎲",t:"LLD",diff:"Beginner",name:"Snake & Ladder",
+   concepts:"Board, dice, players, snakes/ladders map, turn management",
+   links:[{t:"Video",u:"https://youtu.be/ol1hNkFnOyQ"},{t:"Guide",u:"https://medium.com/nerd-for-tech/design-snake-and-ladder-game"}]},
+  // BEGINNER HLD
+  {id:"pr6",ico:"🔗",t:"HLD",diff:"Beginner",name:"URL Shortener",
+   concepts:"Base62 encoding, KV store, redirects, expiry, analytics",
+   links:[{t:"Video",u:"https://youtu.be/JQDHz72LtRQ"},{t:"Grokking",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR"}]},
+  {id:"pr7",ico:"📋",t:"HLD",diff:"Beginner",name:"Pastebin",
+   concepts:"Random key generation, blob storage, TTL expiry, read-heavy optimisation",
+   links:[{t:"Grokking",u:"https://www.educative.io/courses/grokking-the-system-design-interview/3jyvQ3WZ4em"},{t:"Guide",u:"https://medium.com/system-design-blog/design-pastebin"}]},
+  {id:"pr8",ico:"🚦",t:"HLD",diff:"Beginner",name:"Rate Limiter",
+   concepts:"Token bucket, fixed window, per-user limits, Redis atomic ops",
+   links:[{t:"Video",u:"https://youtu.be/FU4WlwfS3G0"},{t:"Guide",u:"https://medium.com/system-design-blog/rate-limiter-algorithms"}]},
+  // INTERMEDIATE LLD
+  {id:"pr9",ico:"🅿️",t:"LLD",diff:"Intermediate",name:"Parking Lot",
+   concepts:"Singleton, Strategy (pricing), multiple vehicle types, ticket generation",
+   links:[{t:"Video",u:"https://youtu.be/DSGsa0pu8-k"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-of-a-parking-lot-system-58e2a34e05c4"}]},
+  {id:"pr10",ico:"🛗",t:"LLD",diff:"Intermediate",name:"Elevator System",
+   concepts:"SCAN algorithm, State machine, request scheduling, multi-elevator coordination",
+   links:[{t:"Video",u:"https://youtu.be/siqiJAJWUVA"},{t:"Guide",u:"https://medium.com/nerd-for-tech/object-oriented-design-of-an-elevator-system-in-java-ef21f47df69f"}]},
+  {id:"pr11",ico:"🏧",t:"LLD",diff:"Intermediate",name:"ATM Machine",
+   concepts:"State pattern, card authentication, account debit, cash dispensing",
+   links:[{t:"Video",u:"https://youtu.be/vJkDzFnRJr4"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-atm-machine"}]},
+  {id:"pr12",ico:"🥤",t:"LLD",diff:"Intermediate",name:"Vending Machine",
+   concepts:"State machine (Idle/HasMoney/Dispense), inventory, change calculation",
+   links:[{t:"Video",u:"https://youtu.be/DCCo8mDkMoU"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-vending-machine"}]},
+  {id:"pr13",ico:"💰",t:"LLD",diff:"Intermediate",name:"Splitwise",
+   concepts:"Group expenses, 3 split types, debt simplification with greedy algorithm",
+   links:[{t:"Video",u:"https://youtu.be/rMnf-rA_FpM"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-splitwise"}]},
+  {id:"pr14",ico:"🎬",t:"LLD",diff:"Intermediate",name:"BookMyShow",
+   concepts:"Theatre hierarchy, concurrent seat locking, optimistic locking, payment",
+   links:[{t:"Video",u:"https://youtu.be/lBAwJgoO3Ek"},{t:"Guide",u:"https://medium.com/nerd-for-tech/design-bookmyshow-low-level-design"}]},
+  // INTERMEDIATE HLD
+  {id:"pr15",ico:"📸",t:"HLD",diff:"Intermediate",name:"Instagram / Photo Feed",
+   concepts:"S3, CDN, feed fanout, follow graph, infinite scroll pagination",
+   links:[{t:"Video",u:"https://youtu.be/hnpzNAPiC0E"},{t:"Grokking",u:"https://www.educative.io/courses/grokking-the-system-design-interview/m22LWKgXOEm"}]},
+  {id:"pr16",ico:"🐦",t:"HLD",diff:"Intermediate",name:"Twitter Timeline",
+   concepts:"Fanout on write vs read, celebrity accounts, Redis sorted sets",
+   links:[{t:"Video",u:"https://youtu.be/wYk0xPP_P_8"},{t:"Guide",u:"https://medium.com/system-design-blog/twitter-timeline-design"}]},
+  {id:"pr17",ico:"🔔",t:"HLD",diff:"Intermediate",name:"Notification System",
+   concepts:"APNs, FCM, priority queues, retries with backoff, user preferences",
+   links:[{t:"Video",u:"https://youtu.be/bBTPZ9NdSk8"},{t:"Guide",u:"https://medium.com/nerd-for-tech/system-design-notification-system"}]},
+  {id:"pr18",ico:"✏️",t:"HLD",diff:"Intermediate",name:"Search Autocomplete",
+   concepts:"Trie, top-k caching, Kafka for frequency counting, Redis sorted sets",
+   links:[{t:"Video",u:"https://youtu.be/9jFpzpLHFcA"},{t:"Grokking",u:"https://www.educative.io/courses/grokking-the-system-design-interview/mE2XkgGRnmp"}]},
+  {id:"pr19",ico:"⚡",t:"HLD",diff:"Intermediate",name:"Distributed Cache",
+   concepts:"Consistent hashing, eviction policies, hot key problem, write strategies",
+   links:[{t:"Video",u:"https://youtu.be/OqCK95AS-YE"},{t:"Guide",u:"https://medium.com/system-design-blog/distributed-cache-system-design"}]},
+  // ADVANCED LLD
+  {id:"pr20",ico:"♟️",t:"LLD",diff:"Advanced",name:"Chess Game",
+   concepts:"Polymorphic pieces, move validation, check/checkmate, game state machine",
+   links:[{t:"Video",u:"https://youtu.be/3HHivbOHMDs"},{t:"Guide",u:"https://medium.com/nerd-for-tech/low-level-design-of-chess-game"}]},
+  {id:"pr21",ico:"🔒",t:"LLD",diff:"Advanced",name:"Thread-Safe LRU Cache",
+   concepts:"ReentrantReadWriteLock, ConcurrentHashMap, sharded locks, benchmarking",
+   links:[{t:"Guide",u:"https://medium.com/nerd-for-tech/concurrent-lru-cache"}]},
+  {id:"pr22",ico:"📡",t:"LLD",diff:"Advanced",name:"Pub-Sub Event Bus",
+   concepts:"Observer pattern, topic registry, async dispatch, backpressure, DLQ",
+   links:[{t:"Guide",u:"https://medium.com/nerd-for-tech/event-bus-design"}]},
+  // ADVANCED HLD
+  {id:"pr23",ico:"💬",t:"HLD",diff:"Advanced",name:"WhatsApp at Scale",
+   concepts:"WebSocket servers, offline delivery, E2E encryption, Cassandra, Kafka",
+   links:[{t:"Video",u:"https://youtu.be/vvhC64hQZMk"},{t:"Guide",u:"https://medium.com/swlh/design-a-chat-system-f20a9e0ff1e3"}]},
+  {id:"pr24",ico:"▶️",t:"HLD",diff:"Advanced",name:"YouTube / Video Streaming",
+   concepts:"HLS/DASH, adaptive bitrate, transcoding workers, CDN, deduplication",
+   links:[{t:"Video",u:"https://youtu.be/psQzyFfsUGU"},{t:"Grokking",u:"https://www.educative.io/courses/grokking-the-system-design-interview/xV26VjZ7yMl"}]},
+  {id:"pr25",ico:"🚗",t:"HLD",diff:"Advanced",name:"Uber / Ride Sharing",
+   concepts:"Geohash, real-time location, driver matching, surge pricing, ETA",
+   links:[{t:"Video",u:"https://youtu.be/umWABit-wbk"},{t:"Uber Eng Blog",u:"https://eng.uber.com"}]},
+  {id:"pr26",ico:"📄",t:"HLD",diff:"Advanced",name:"Google Docs (Real-time Collab)",
+   concepts:"OT/CRDT, vector clocks, conflict resolution, WebSocket broadcast",
+   links:[{t:"Video",u:"https://youtu.be/2auwirNBvGg"},{t:"Guide",u:"https://medium.com/system-design-blog/google-docs-system-design"}]},
+  {id:"pr27",ico:"💳",t:"HLD",diff:"Advanced",name:"Payment System (Stripe-like)",
+   concepts:"Idempotency keys, double-spend, distributed ledger, saga pattern, PCI-DSS",
+   links:[{t:"Video",u:"https://youtu.be/olfaBgJrUBI"},{t:"Stripe Blog",u:"https://stripe.com/blog/engineering"}]},
+  {id:"pr28",ico:"🔍",t:"HLD",diff:"Advanced",name:"Google Search Engine",
+   concepts:"Web crawler, inverted index, TF-IDF, PageRank, serving layer, indexing",
+   links:[{t:"Video",u:"https://youtu.be/0LTXCcVRQi0"},{t:"Google Papers",u:"https://research.google/pubs"}]},
+];
 
-// ===================== TAB SWITCHING =====================
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+const RESOURCES = [
+  {t:"Course", ico:"🎓", title:"Grokking the System Design Interview",
+   author:"Educative.io", free:false,
+   desc:"The most recommended course for system design interviews. Covers 20+ problems with step-by-step solutions. Used by hundreds of thousands of engineers.",
+   tags:["HLD","Beginner","Intermediate","Advanced"],
+   url:"https://www.educative.io/courses/grokking-the-system-design-interview"},
+  {t:"Course", ico:"🎓", title:"ByteByteGo System Design Course",
+   author:"Alex Xu", free:false,
+   desc:"By the author of System Design Interview books. Covers fundamentals and advanced topics with excellent diagrams. Pairs perfectly with his books.",
+   tags:["HLD","All Levels"],
+   url:"https://bytebytego.com"},
+  {t:"GitHub", ico:"⭐", title:"System Design Primer",
+   author:"donnemartin (260k+ ⭐)", free:true,
+   desc:"The most starred GitHub repo for system design. Covers everything from basics to advanced topics. Great starting point for any level.",
+   tags:["HLD","LLD","All Levels"],
+   url:"https://github.com/donnemartin/system-design-primer"},
+  {t:"Book", ico:"📖", title:"System Design Interview Vol. 1",
+   author:"Alex Xu", free:false,
+   desc:"Step-by-step guide to answer system design questions. Covers URL shortener, rate limiter, chat systems, and more. Essential reading.",
+   tags:["HLD","Intermediate"],
+   url:"https://www.amazon.com/System-Design-Interview-insiders-Second/dp/B08CMF2CQF"},
+  {t:"Book", ico:"📖", title:"System Design Interview Vol. 2",
+   author:"Alex Xu & Sahn Lam", free:false,
+   desc:"Advanced topics — proximity service, nearby friends, Google Maps, distributed email, hotel reservation system and more.",
+   tags:["HLD","Advanced"],
+   url:"https://www.amazon.com/System-Design-Interview-Insiders-Guide/dp/1736049119"},
+  {t:"Book", ico:"📖", title:"Designing Data-Intensive Applications",
+   author:"Martin Kleppmann", free:false,
+   desc:"The bible of distributed systems. Covers replication, partitioning, transactions, consistency, consensus. A must-read for senior engineers.",
+   tags:["HLD","Advanced","Distributed Systems"],
+   url:"https://dataintensive.net"},
+  {t:"Book", ico:"📖", title:"Head First Design Patterns",
+   author:"Freeman, Robson et al.", free:false,
+   desc:"The most beginner-friendly book on design patterns. Visual, funny, and deeply practical. Best first book for LLD preparation.",
+   tags:["LLD","Beginner","Design Patterns"],
+   url:"https://www.oreilly.com/library/view/head-first-design/0596007124"},
+  {t:"Book", ico:"📖", title:"Refactoring: Improving Design of Existing Code",
+   author:"Martin Fowler", free:false,
+   desc:"Classic book on code quality and design. Teaches you to think about maintainable, clean OOP design — essential for LLD.",
+   tags:["LLD","Intermediate"],
+   url:"https://martinfowler.com/books/refactoring.html"},
+  {t:"Video", ico:"📹", title:"ByteByteGo YouTube Channel",
+   author:"Alex Xu", free:true,
+   desc:"Best YouTube channel for system design. Short, clear animated videos covering HLD fundamentals and real system design problems.",
+   tags:["HLD","All Levels"],
+   url:"https://www.youtube.com/@ByteByteGo"},
+  {t:"Video", ico:"📹", title:"Gaurav Sen — System Design",
+   author:"Gaurav Sen", free:true,
+   desc:"Excellent in-depth walkthroughs of real systems (Uber, Whatsapp, Netflix). Very popular for FAANG prep. Explains tradeoffs clearly.",
+   tags:["HLD","Intermediate","Advanced"],
+   url:"https://www.youtube.com/@gkcs"},
+  {t:"Video", ico:"📹", title:"Christopher Okhravi — Design Patterns",
+   author:"Christopher Okhravi", free:true,
+   desc:"The absolute best YouTube playlist for design patterns. Every GoF pattern explained clearly with real examples. Watch all 23 episodes.",
+   tags:["LLD","Design Patterns","All Levels"],
+   url:"https://youtube.com/playlist?list=PLrhzvIcii6GNjpARjnq4yD3HHUnTSN5pC"},
+  {t:"Video", ico:"📹", title:"Neetcode System Design",
+   author:"Neetcode", free:true,
+   desc:"Clean, concise system design walkthroughs. Great for beginners. Covers URL shortener, Twitter, Netflix, Discord and more.",
+   tags:["HLD","Beginner","Intermediate"],
+   url:"https://www.youtube.com/@NeetCodeIO"},
+  {t:"Video", ico:"📹", title:"Hussein Nasser — Backend Engineering",
+   author:"Hussein Nasser", free:true,
+   desc:"Deep technical dives into protocols, databases, proxies, and backend engineering. Best for understanding how things actually work.",
+   tags:["HLD","Advanced","Networking"],
+   url:"https://www.youtube.com/@hnasr"},
+  {t:"Blog", ico:"✍️", title:"High Scalability Blog",
+   author:"Todd Hoff", free:true,
+   desc:"Real architecture stories from companies like Netflix, Twitter, Airbnb, Slack. Learn how they actually built their systems.",
+   tags:["HLD","Advanced"],
+   url:"http://highscalability.com"},
+  {t:"Blog", ico:"✍️", title:"Refactoring.Guru — Design Patterns",
+   author:"Alexander Shvets", free:true,
+   desc:"The cleanest, most visual guide to all 23 GoF patterns + SOLID principles. Has code examples in multiple languages.",
+   tags:["LLD","Design Patterns","All Levels"],
+   url:"https://refactoring.guru/design-patterns"},
+  {t:"Blog", ico:"✍️", title:"Martin Fowler's Blog",
+   author:"Martin Fowler", free:true,
+   desc:"Deep dives into software architecture, microservices, domain-driven design, CQRS, event sourcing. Essential for advanced learners.",
+   tags:["HLD","LLD","Advanced"],
+   url:"https://martinfowler.com"},
+  {t:"Blog", ico:"✍️", title:"AWS Architecture Blog",
+   author:"Amazon Web Services", free:true,
+   desc:"Real-world architecture patterns and best practices from the team that runs the world's largest cloud. Very practical.",
+   tags:["HLD","Advanced"],
+   url:"https://aws.amazon.com/blogs/architecture"},
+  {t:"Blog", ico:"✍️", title:"Netflix Tech Blog",
+   author:"Netflix Engineering", free:true,
+   desc:"How Netflix builds its platform — microservices, resilience patterns, data infrastructure, personalisation. Real engineering at scale.",
+   tags:["HLD","Advanced"],
+   url:"https://netflixtechblog.com"},
+  {t:"GitHub", ico:"⭐", title:"Awesome System Design",
+   author:"madd86 (GitHub)", free:true,
+   desc:"Curated list of system design resources — books, courses, blog posts, GitHub repos, and real-world engineering blogs.",
+   tags:["HLD","All Levels"],
+   url:"https://github.com/madd86/awesome-system-design"},
+  {t:"GitHub", ico:"⭐", title:"Low Level Design Primer",
+   author:"prasadgujar (GitHub)", free:true,
+   desc:"Comprehensive LLD resource with OOP concepts, SOLID, all design patterns with code, and real LLD problems with solutions.",
+   tags:["LLD","All Levels","Design Patterns"],
+   url:"https://github.com/prasadgujar/low-level-design-primer"},
+  {t:"GitHub", ico:"⭐", title:"Java Design Patterns (iluwatar)",
+   author:"iluwatar (GitHub)", free:true,
+   desc:"The most comprehensive GitHub repo for all 23 GoF design patterns with clean Java code examples. Every pattern has a README and runnable code. 90k+ stars.",
+   tags:["LLD","Design Patterns","All Levels"],
+   url:"https://github.com/iluwatar/java-design-patterns"},
+  {t:"Blog", ico:"✍️", title:"GeeksForGeeks — System Design",
+   author:"GeeksForGeeks", free:true,
+   desc:"Beginner-friendly system design articles covering all HLD topics. Good for building foundational understanding before tackling advanced resources.",
+   tags:["HLD","Beginner","Intermediate"],
+   url:"https://www.geeksforgeeks.org/system-design-tutorial"},
+  {t:"Blog", ico:"✍️", title:"ByteByteGo Newsletter",
+   author:"Alex Xu", free:true,
+   desc:"Weekly newsletter with visual system design breakdowns. Clear diagrams, easy language. One of the best ways to stay sharp on system design concepts.",
+   tags:["HLD","All Levels"],
+   url:"https://blog.bytebytego.com"},
+  {t:"Video", ico:"📹", title:"Neetcode.io — System Design Playlist",
+   author:"Neetcode", free:true,
+   desc:"Beginner to intermediate system design walkthroughs. Crystal-clear explanations with diagrams. Highly recommended if you're new to system design interviews.",
+   tags:["HLD","Beginner","Intermediate"],
+   url:"https://www.youtube.com/playlist?list=PLot-Xpze53ldVwtstag2TL4HQhAnC8ATf"},
+  {t:"Video", ico:"📹", title:"Tech Dummies Narendra L — System Design",
+   author:"Tech Dummies", free:true,
+   desc:"In-depth walkthroughs of real systems (Kafka, Cassandra, Redis, Zookeeper). Excellent for understanding distributed systems internals. Good for intermediate to advanced.",
+   tags:["HLD","Intermediate","Advanced"],
+   url:"https://www.youtube.com/@TechDummiesNarendraL"},
+  {t:"Video", ico:"📹", title:"Derek Banas — Design Patterns Full Series",
+   author:"Derek Banas", free:true,
+   desc:"Complete series covering all 23 GoF design patterns in Java. Concise, code-focused videos. Best watched alongside Refactoring.Guru for visual explanation.",
+   tags:["LLD","Design Patterns","Beginner","Intermediate"],
+   url:"https://www.youtube.com/playlist?list=PLF206E906175C7E07"},
+  {t:"Course", ico:"🎓", title:"Grokking the System Design Interview",
+   author:"educative.io", free:false,
+   desc:"The most popular system design interview course. Covers 16 real system design problems step by step. Text-based, great for self-paced learning. Used by thousands of engineers at FAANG.",
+   tags:["HLD","Intermediate","Advanced"],
+   url:"https://www.educative.io/courses/grokking-the-system-design-interview"},
+  {t:"Course", ico:"🎓", title:"Grokking the Low Level Design Interview",
+   author:"educative.io", free:false,
+   desc:"Covers OOP principles, SOLID, all major LLD problems with class diagrams and code. Best structured LLD course available online.",
+   tags:["LLD","Intermediate","Advanced"],
+   url:"https://www.educative.io/courses/grokking-the-object-oriented-design-interview"},
+  {t:"Blog", ico:"✍️", title:"Uber Engineering Blog",
+   author:"Uber Engineering", free:true,
+   desc:"Real engineering blog from Uber covering geolocation, ride matching, surge pricing, payments. Excellent case studies for advanced HLD.",
+   tags:["HLD","Advanced"],
+   url:"https://eng.uber.com"},
+  {t:"Blog", ico:"✍️", title:"Stripe Engineering Blog",
+   author:"Stripe Engineering", free:true,
+   desc:"Deep dives into payments, distributed systems, API design, reliability. Essential reading for payment system design and API design patterns.",
+   tags:["HLD","Advanced"],
+   url:"https://stripe.com/blog/engineering"},
+];
+
+const QUESTIONS = [
+  {id:1,t:"HLD",freq:5,topic:"URL Shortener",cos:["Amazon","Google","Uber"],
+   q:"Design a URL shortener like bit.ly. How would you handle 1 billion URLs?",
+   hint:"Base62 encoding for short codes. Use Redis as primary KV store for redirect. Partition by first char of short code. Pre-generate short codes to avoid collision at write time. Read:write ≈ 100:1 — cache aggressively."},
+  {id:2,t:"HLD",freq:5,topic:"Social Feed",cos:["Twitter","Meta","LinkedIn"],
+   q:"How would you design Twitter's home timeline? Handle celebrities with millions of followers.",
+   hint:"Fanout-on-write (push model) for normal users — write to followers' timelines on tweet. For celebrities (>1M followers), use fanout-on-read (pull model). Hybrid approach: push for regular users, pull + merge for celebrity feeds. Redis sorted set per user timeline."},
+  {id:3,t:"HLD",freq:5,topic:"Caching",cos:["Amazon","Google","Meta"],
+   q:"Design a distributed cache. Handle cache invalidation and eviction at scale.",
+   hint:"Consistent hashing to distribute keys across nodes. LRU eviction per node. Write policies: cache-aside (most common), write-through, write-back. Cache stampede: use mutex lock or probabilistic early expiration. Hot key problem: local in-process cache + read replicas."},
+  {id:4,t:"HLD",freq:5,topic:"Chat System",cos:["Meta","Microsoft","Slack"],
+   q:"Design WhatsApp. How does message delivery work when a user is offline?",
+   hint:"WebSocket for real-time. On disconnect, buffer messages in Cassandra with 'pending' status. On reconnect, device polls for pending messages. Delivery receipts: single tick (sent), double tick (delivered), blue tick (read). End-to-end encryption with Signal Protocol."},
+  {id:5,t:"HLD",freq:5,topic:"Video Streaming",cos:["Netflix","YouTube","Amazon"],
+   q:"Design Netflix's video streaming. Ensure low latency globally for 200 million users.",
+   hint:"Upload → transcode to multiple resolutions (HLS segments). Store in S3. Distribute via CDN (Netflix Open Connect ISP-hosted). Client uses adaptive bitrate — switches quality based on bandwidth. CDN serves 95%+ of traffic. ABR algorithm selects optimal quality per segment."},
+  {id:6,t:"HLD",freq:5,topic:"Rate Limiting",cos:["Stripe","Cloudflare","Google"],
+   q:"Design a rate limiter. Explain token bucket vs sliding window algorithms.",
+   hint:"Token bucket: tokens refilled at constant rate, consumed per request. Allows bursts. Sliding window: track request timestamps in Redis sorted set, count requests in window. Sliding window counter: hybrid — less memory than log. Use Redis + Lua for atomic check-and-decrement. Return 429 with Retry-After header."},
+  {id:7,t:"HLD",freq:5,topic:"Uber / Geo",cos:["Uber","Lyft","DoorDash"],
+   q:"Design Uber's ride-matching system. Find nearby drivers efficiently at scale.",
+   hint:"Geohash encode driver locations (6-char = ~1km precision). Store in Redis GEO. On ride request: query Geohash cell + 8 neighbours. WebSocket for real-time driver location updates (every 4 seconds). Match by ETA not just distance. Kafka for location event stream. Dispatch service selects top-k candidates."},
+  {id:8,t:"HLD",freq:5,topic:"Consistent Hashing",cos:["Amazon","Google","Cassandra"],
+   q:"Explain consistent hashing. Why use it over simple modulo hashing?",
+   hint:"Modulo hashing: adding/removing a server remaps almost all keys. Consistent hashing: servers placed on hash ring, key goes to next server clockwise. Only K/N keys remapped on change (K=keys, N=servers). Virtual nodes (150-200 per server) for even distribution. Used in DynamoDB, Cassandra, Redis Cluster, Memcached."},
+  {id:9,t:"HLD",freq:5,topic:"Kafka",cos:["LinkedIn","Uber","Netflix"],
+   q:"How does Kafka work internally? When would you use it vs a database?",
+   hint:"Topics divided into partitions (ordered log). Producers append to partitions. Consumer groups each get their own offset per partition. Retention period (not deleted after consume). Replication factor for fault tolerance. Use Kafka for: event streaming, decoupling microservices, audit log, activity tracking. DB for: querying, random access, relationships."},
+  {id:10,t:"HLD",freq:5,topic:"CAP Theorem",cos:["All FAANG","Stripe"],
+   q:"What is the CAP theorem? Give real-world examples of CP, AP, and CA systems.",
+   hint:"C: every read gets latest write. A: every request gets a response. P: system works despite network partition. Since P is unavoidable in distributed systems, choose C or A. CP: MongoDB, Zookeeper, Redis — prefer consistency, may refuse requests during partition. AP: Cassandra, DynamoDB, CouchDB — prefer availability, may return stale data. CA: single-node databases."},
+  {id:11,t:"HLD",freq:5,topic:"Database Sharding",cos:["Amazon","Uber","Airbnb"],
+   q:"How do you shard a database? Difference between range-based and hash-based sharding?",
+   hint:"Range sharding: partition by value range (A-M, N-Z). Natural for time-series, supports range queries, but creates hot spots (recent data). Hash sharding: partition by hash of key. Even distribution, no hot spots, but can't range query. Consistent hashing for resharding without full data migration. Cross-shard transactions need 2PC or saga pattern."},
+  {id:12,t:"HLD",freq:4,topic:"Notification System",cos:["Apple","Google","Meta"],
+   q:"Design a notification system to send 1 million push notifications per second.",
+   hint:"User service → Notification service → Message queue → Platform-specific workers (APNs for iOS, FCM for Android). Separate high-priority (OTP, alerts) from low-priority (marketing). Device token registry (Redis). Retry with exponential backoff. Fan-out: one event → multiple notifications. Rate limiting per user to avoid spam."},
+  {id:13,t:"HLD",freq:4,topic:"Payment System",cos:["Stripe","PayPal","Amazon"],
+   q:"Design a payment system. How do you prevent double charges?",
+   hint:"Idempotency key per payment request (UUID in header). Server stores key → result mapping in Redis (24hr TTL). Same key = return cached result, not re-process. Ledger as append-only log (never update, only insert). Saga pattern for distributed transactions. Async reconciliation for eventual consistency. PCI-DSS: never store raw card data."},
+  {id:14,t:"LLD",freq:5,topic:"LRU Cache",cos:["Google","Amazon","Meta"],
+   q:"Design an LRU Cache. Implement with O(1) get and put operations.",
+   hint:"HashMap<key, Node> for O(1) lookup. Doubly LinkedList to track access order (MRU at head, LRU at tail). get: O(1) lookup + move node to head. put: O(1) insert at head + evict tail if over capacity. Thread-safe: ReentrantReadWriteLock for concurrent reads, exclusive lock for writes. Or use LinkedHashMap(capacity, 0.75f, true) in Java."},
+  {id:15,t:"LLD",freq:5,topic:"SOLID",cos:["All FAANG","Atlassian"],
+   q:"Explain SOLID principles with concrete code examples. Where does DIP get violated most?",
+   hint:"SRP: PaymentProcessor shouldn't also send emails. OCP: add new payment methods without modifying existing code (use Strategy pattern). LSP: Square shouldn't extend Rectangle if it overrides setWidth differently. ISP: don't force classes to implement methods they don't need — split fat interfaces. DIP: business logic shouldn't depend on MySQL directly, depend on Repository interface."},
+  {id:16,t:"LLD",freq:5,topic:"Parking Lot",cos:["Amazon","Microsoft","Uber"],
+   q:"Design a Parking Lot system. Model it with classes and relationships.",
+   hint:"ParkingLot (Singleton). ParkingFloor contains ParkingSpots. ParkingSpot types: Compact, Large, Handicapped, Electric. Vehicle types: Car, Truck, Motorcycle. ParkingTicket on entry with timestamp. PricingStrategy (Strategy pattern) for hourly, flat, weekend rates. DisplayBoard shows available spots per floor. Gate for entry and exit."},
+  {id:17,t:"LLD",freq:5,topic:"Design Patterns",cos:["All FAANG","Salesforce"],
+   q:"Where would you use Observer vs Strategy vs State pattern? Give a single system example.",
+   hint:"Vending Machine: State for machine modes (Idle/HasMoney/Dispense/OutOfStock). Pricing: Strategy for different pricing algorithms. UI updates on state change: Observer — displays subscribe to machine state. All three patterns in one system! Observer = who to notify. Strategy = how to do something. State = what mode am I in."},
+  {id:18,t:"LLD",freq:4,topic:"Elevator System",cos:["Amazon","Google","Microsoft"],
+   q:"Design an elevator scheduling system. Minimise wait time for multiple elevators.",
+   hint:"SCAN/LOOK algorithm: elevator moves in one direction, serves all requests, then reverses. Classes: ElevatorSystem, Elevator, Request, Floor, Button. State machine per elevator: IDLE, MOVING_UP, MOVING_DOWN, MAINTENANCE. Priority queue (min-heap) of pending requests sorted by floor distance. Dispatcher assigns new requests to nearest idle elevator."},
+  {id:19,t:"LLD",freq:4,topic:"Vending Machine",cos:["Amazon","Uber","Google"],
+   q:"Design a vending machine. Model state transitions and handle insufficient funds.",
+   hint:"States: IDLE → PRODUCT_SELECTED → PAYMENT_PENDING → DISPENSING → IDLE. State pattern: each state is a class with handle() method. NoProductState if inventory empty. Classes: VendingMachine, Coin, Product, Inventory, Display. On insufficient funds: return to PRODUCT_SELECTED. On dispense: update inventory, return change, transition to IDLE."},
+  {id:20,t:"LLD",freq:4,topic:"Chess",cos:["Amazon","Google","Microsoft"],
+   q:"Design a Chess game. How do you validate moves and detect checkmate?",
+   hint:"Board is 8x8 grid of Squares. Piece is abstract with subclasses (King, Queen, Rook, Bishop, Knight, Pawn). Piece.getValidMoves() returns legal moves (polymorphism). After each move: isKingInCheck(). Checkmate: king in check AND no valid moves for any piece. Stalemate: not in check AND no valid moves. Castling, en passant, pawn promotion as special cases."},
+  {id:21,t:"LLD",freq:4,topic:"Splitwise",cos:["Airbnb","Uber","Amazon"],
+   q:"Design Splitwise. How do you simplify debts in a group to minimise transactions?",
+   hint:"Expense has Payer and list of Splits (Equal/Exact/Percentage). Calculate net balance per person: positive = owed money, negative = owes money. Debt simplification: use two heaps (max-heap for creditors, min-heap for debtors). Greedily match largest creditor with largest debtor. O(n log n). Classes: User, Group, Expense, Split, Balance, Transaction."},
+  {id:22,t:"HLD",freq:4,topic:"Google Docs",cos:["Google","Microsoft","Notion"],
+   q:"Design Google Docs with real-time collaboration. Handle conflicting edits.",
+   hint:"Operational Transformation (OT): each operation is transformed against concurrent operations so all clients converge. Or CRDT: data structure that merges automatically. WebSocket for real-time broadcast. Document stored as sequence of operations (event sourcing). Last-write-wins for formatting. Cursor positions broadcasted separately. Version vector for causality tracking."},
+  {id:23,t:"LLD",freq:4,topic:"Concurrency",cos:["All FAANG","Microsoft"],
+   q:"How do you handle concurrency in system design? Explain deadlock prevention.",
+   hint:"Deadlock conditions: mutual exclusion, hold and wait, no preemption, circular wait. Prevention: 1) Lock ordering (always acquire in same order). 2) tryLock with timeout. 3) Avoid holding lock while waiting. Race conditions: use synchronized or ReentrantLock. Read-heavy: ReadWriteLock. Concurrent collections: ConcurrentHashMap, CopyOnWriteArrayList. Immutable objects are thread-safe by definition."},
+  {id:24,t:"LLD",freq:4,topic:"Ticket Booking",cos:["BookMyShow","Ticketmaster","Amazon"],
+   q:"Design BookMyShow's seat booking. Prevent two users from booking the same seat.",
+   hint:"Optimistic locking: version field on seat row. SELECT seat WHERE id=X. UPDATE seat SET booked=true, version=version+1 WHERE id=X AND version=current. Fails if another transaction updated first. Pessimistic: SELECT FOR UPDATE (row lock). Distributed: Redis SETNX with TTL (hold seat for 10 min). Two-phase: reserve → pay → confirm. Release reserved seats on payment timeout."},
+  {id:25,t:"HLD",freq:3,topic:"Web Crawler",cos:["Google","Amazon","Bing"],
+   q:"Design a distributed web crawler. How do you avoid re-crawling the same URL?",
+   hint:"URL Frontier: priority queue of URLs to crawl. Distribute by hash(domain) to dedicated fetchers (politeness). Dedup: Bloom filter for fast membership test (95%+ of URLs), backed by persistent store for true dedup. Content dedup: SimHash for near-duplicate detection. Robots.txt compliance. Multi-threaded with async I/O. Recrawl scheduling based on content change frequency."},
+];
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let progress = {}, customLinks = {};
+let hldImpF='all', hldSrch='', lldImpF='all', lldSrch='';
+let patCatF='all', patSrch='';
+let pracDiffF='all', pracTypeF='all', pracSrch='';
+let resCatF='all', resSrch='';
+let qTypeF='all', qSrch='';
+let linkTarget=null;
+
+function loadState(){try{const s=localStorage.getItem('sdt-p');if(s)progress=JSON.parse(s);const l=localStorage.getItem('sdt-l');if(l)customLinks=JSON.parse(l);}catch(e){}}
+function saveState(){try{localStorage.setItem('sdt-p',JSON.stringify(progress));localStorage.setItem('sdt-l',JSON.stringify(customLinks));}catch(e){}}
+
+// ═══════════════════════════════════════════════
+// TAB SWITCH
+// ═══════════════════════════════════════════════
+function sw(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
   document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
   document.getElementById(`tab-${tab}`).classList.add('active');
-
-  if (tab === 'hld') renderSubTable('hldBody', topicsData.filter(t => t.type === 'HLD'));
-  if (tab === 'lld') renderSubTable('lldBody', topicsData.filter(t => t.type === 'LLD'));
-  if (tab === 'frequency') renderFrequency();
-  if (tab === 'questions') renderQuestions();
+  if(tab==='hld')renderHLD();
+  if(tab==='lld')renderLLD();
+  if(tab==='patterns')renderPatterns();
+  if(tab==='practice')renderPractice();
+  if(tab==='resources')renderResources();
+  if(tab==='questions')renderQuestions();
+  if(tab==='roadmap')renderRoadmap();
 }
 
-// ===================== TABLE RENDERING =====================
-function renderTopicsTable() {
-  let filtered = topicsData.filter(t => {
-    const statusMatch = currentFilterStatus === 'all' || (progress[t.id] || 'not-started') === currentFilterStatus;
-    const typeMatch = currentFilterType === 'all' || t.type === currentFilterType;
-    const searchMatch = !currentSearch || t.name.toLowerCase().includes(currentSearch.toLowerCase()) || t.desc.toLowerCase().includes(currentSearch.toLowerCase());
-    return statusMatch && typeMatch && searchMatch;
+// ═══════════════════════════════════════════════
+// ROADMAP
+// ═══════════════════════════════════════════════
+function renderRoadmap(){
+  const c=document.getElementById('roadmapContainer');
+  if(c.children.length>0)return;
+  ROADMAP.forEach((phase,pi)=>{
+    const el=document.createElement('div');
+    el.className='rm-phase';
+    el.innerHTML=`
+      <div class="rm-phase-hdr" onclick="togglePhase(this)">
+        <span class="rm-ph-ico">${phase.icon}</span>
+        <div class="rm-ph-info">
+          <div class="rm-ph-title">${phase.phase}</div>
+          <div class="rm-ph-sub">${phase.sub}</div>
+        </div>
+        <span class="badge ${phase.badgeCls} rm-ph-badge">${phase.badge}</span>
+        <span class="rm-ph-arrow">${pi===0?'▼':'▶'}</span>
+      </div>
+      <div class="rm-phase-body ${pi===0?'open':''}">
+        ${phase.items.map(item=>`
+          <div class="rm-item">
+            <div class="rm-item-top">
+              <span class="rm-item-ico">${item.ico}</span>
+              <span class="rm-item-name">${item.name}</span>
+            </div>
+            <div class="rm-item-desc">${item.desc}</div>
+            <div class="rm-item-links">
+              ${item.links.map(l=>`
+                <a class="rm-link" href="${l.u}" target="_blank" rel="noopener">
+                  <span class="rm-link-type lt-${l.lt}">${l.lt.toUpperCase()}</span>${l.t}
+                </a>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>`;
+    c.appendChild(el);
   });
-
-  const tbody = document.getElementById('topicsBody');
-  tbody.innerHTML = '';
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="empty">// no topics match current filters</td></tr>`;
-    return;
-  }
-
-  filtered.forEach((topic, idx) => renderTopicRow(tbody, topic, idx + 1, true));
-  updateStats();
+}
+function togglePhase(hdr){
+  const body=hdr.nextElementSibling;
+  const arrow=hdr.querySelector('.rm-ph-arrow');
+  body.classList.toggle('open');
+  arrow.textContent=body.classList.contains('open')?'▼':'▶';
 }
 
-function renderSubTable(bodyId, topics) {
-  const tbody = document.getElementById(bodyId);
-  tbody.innerHTML = '';
-  topics.forEach((topic, idx) => renderTopicRow(tbody, topic, idx + 1, false));
-}
-
-function renderTopicRow(tbody, topic, idx, showType) {
-  const status = progress[topic.id] || 'not-started';
-  const allLinks = [...topic.links, ...(customLinks[topic.id] || [])];
-
-  const tr = document.createElement('tr');
-  tr.dataset.topicId = topic.id;
-
-  const impSegs = ['','','','',''].map((_, i) => {
-    const levels = { critical:5, high:4, medium:3, low:1 };
-    const filled = i < levels[topic.importance];
-    return `<div class="imp-seg ${filled ? 'on-'+topic.importance : ''}"></div>`;
-  }).join('');
-
-  const impLabel = { critical:'Critical', high:'High', medium:'Medium', low:'Low' }[topic.importance];
-  const impLabelColor = { critical:'var(--red)', high:'var(--amber)', medium:'var(--green2)', low:'var(--text3)' }[topic.importance];
-
-  const typeBadge = showType ? `<td><span class="badge badge-${topic.type.toLowerCase()}">${topic.type}</span></td>` : '';
-
-  const linksHtml = allLinks.map(l =>
-    `<a class="link-chip" href="${l.url}" target="_blank" rel="noopener">📖 ${l.title}</a>`
-  ).join('') + `<button class="add-link-btn" onclick="openAddLink(${topic.id})">+ Add</button>`;
-
-  tr.innerHTML = `
-    <td style="color:var(--text3);font-size:11px">${String(idx).padStart(2,'0')}</td>
-    <td>
-      <div class="topic-name"><span class="topic-icon">${topic.icon}</span>${topic.name}</div>
-      <div class="topic-category">${topic.desc}</div>
-    </td>
-    ${typeBadge}
-    <td>
-      <div class="importance">
-        <div class="imp-bar">${impSegs}</div>
-        <span class="imp-label" style="color:${impLabelColor}">${impLabel}</span>
-      </div>
-    </td>
-    <td>
-      <select class="status-select ${status}" onchange="updateStatus(${topic.id}, this)">
-        <option value="not-started" ${status==='not-started'?'selected':''}>⬜ Not Started</option>
-        <option value="active" ${status==='active'?'selected':''}>🔄 Active</option>
-        <option value="completed" ${status==='completed'?'selected':''}>✅ Completed</option>
-      </select>
-    </td>
-    <td>
-      <div class="companies">
-        ${topic.companies.map(c => `<span class="company-tag">${c}</span>`).join('')}
-      </div>
-    </td>
-    <td>
-      <div class="links-cell">${linksHtml}</div>
-    </td>
-  `;
-
-  tbody.appendChild(tr);
-}
-
-// ===================== STATUS UPDATE =====================
-function updateStatus(topicId, selectEl) {
-  const val = selectEl.value;
-  selectEl.className = `status-select ${val}`;
-  progress[topicId] = val;
+// ═══════════════════════════════════════════════
+// STATUS
+// ═══════════════════════════════════════════════
+function updateSS(id,el){
+  const v=el.value;
+  el.className=`ss ${v==='not-started'?'ns':v==='active'?'ac':'dn'}`;
+  progress[id]=v;
   saveState();
   updateStats();
 }
-
-function updateStats() {
-  const values = topicsData.map(t => progress[t.id] || 'not-started');
-  const completed = values.filter(v => v === 'completed').length;
-  const active = values.filter(v => v === 'active').length;
-  const notStarted = values.filter(v => v === 'not-started').length;
-
-  document.getElementById('completedCount').textContent = completed;
-  document.getElementById('activeCount').textContent = active;
-  document.getElementById('notStartedCount').textContent = notStarted;
-
-  const pct = Math.round((completed / topicsData.length) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
+function ssHtml(id){
+  const v=progress[id]||'not-started';
+  const cls=v==='not-started'?'ns':v==='active'?'ac':'dn';
+  const opts=['not-started','active','completed'].map(o=>`<option value="${o}" ${v===o?'selected':''}>${o==='not-started'?'⬜ Not Started':o==='active'?'🔄 Active':'✅ Done'}</option>`).join('');
+  return `<select class="ss ${cls}" onchange="updateSS('${id}',this)">${opts}</select>`;
+}
+function impBadge(i){
+  const m={critical:['imp-crit','Critical'],high:['imp-high','High'],medium:['imp-med','Medium'],low:['imp-low','Low']};
+  return `<span class="badge ${m[i][0]}">${m[i][1]}</span>`;
+}
+function lchips(id,links){
+  const all=[...links,...(customLinks[id]||[])];
+  return `<div class="lchips">${all.map(l=>`<a class="lchip" href="${l.u}" target="_blank" rel="noopener">↗ ${l.t}</a>`).join('')}<button class="add-lnk" onclick="openModal('${id}')">+ Add</button></div>`;
 }
 
-// ===================== FILTERS =====================
-function filterTopics(val) {
-  currentSearch = val;
-  renderTopicsTable();
+// ═══════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════
+function updateStats(){
+  const all=[...HLD_TOPICS,...LLD_TOPICS,...PATTERNS,...PRACTICE].map(x=>progress[x.id]||'not-started');
+  const done=all.filter(v=>v==='completed').length;
+  const act=all.filter(v=>v==='active').length;
+  const ns=all.filter(v=>v==='not-started').length;
+  document.getElementById('cDone').textContent=done;
+  document.getElementById('cActive').textContent=act;
+  document.getElementById('cNS').textContent=ns;
+  const pct=Math.round(done/all.length*100);
+  document.getElementById('pgFill').style.width=pct+'%';
+  document.getElementById('pgPct').textContent=pct+'%';
 }
 
-function filterByStatus(status, btn) {
-  currentFilterStatus = status;
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    if (['all','not-started','active','completed'].includes(b.textContent.trim().toLowerCase().replace(' ','-'))) b.classList.remove('active');
+// ═══════════════════════════════════════════════
+// HLD
+// ═══════════════════════════════════════════════
+function renderHLD(){
+  const data=HLD_TOPICS.filter(x=>{
+    if(hldImpF!=='all'&&x.imp!==hldImpF)return false;
+    if(hldSrch&&!x.name.toLowerCase().includes(hldSrch.toLowerCase())&&!x.desc.toLowerCase().includes(hldSrch.toLowerCase()))return false;
+    return true;
   });
-  // reset status filter buttons only
-  const statusBtns = document.querySelectorAll('#tab-topics .filter-bar .filter-btn');
-  statusBtns.forEach(b => {
-    if (['All','Not Started','Active','Completed'].includes(b.textContent.trim())) b.classList.remove('active');
+  const tb=document.getElementById('hldBody');
+  tb.innerHTML=data.length===0?`<tr><td colspan="6" class="empty">No topics match filters</td></tr>`:
+    data.map((x,i)=>`<tr>
+      <td style="color:var(--t3);font-size:10px">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="t-row"><span class="t-ico">${x.ico}</span><div><div class="t-name">${x.name}</div><div class="t-sub">${x.desc}</div></div></div></td>
+      <td>${impBadge(x.imp)}</td>
+      <td>${ssHtml(x.id)}</td>
+      <td><div class="tags">${x.cos.map(c=>`<span class="ctag">${c}</span>`).join('')}</div></td>
+      <td>${lchips(x.id,x.links)}</td>
+    </tr>`).join('');
+}
+function filterHLD(v){hldSrch=v;renderHLD();}
+function fhImp(v,btn){hldImpF=v;document.querySelectorAll('#tab-hld .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderHLD();}
+
+// ═══════════════════════════════════════════════
+// LLD
+// ═══════════════════════════════════════════════
+function renderLLD(){
+  const data=LLD_TOPICS.filter(x=>{
+    if(lldImpF!=='all'&&x.imp!==lldImpF)return false;
+    if(lldSrch&&!x.name.toLowerCase().includes(lldSrch.toLowerCase())&&!x.desc.toLowerCase().includes(lldSrch.toLowerCase()))return false;
+    return true;
   });
-  btn.classList.add('active');
-  renderTopicsTable();
+  const tb=document.getElementById('lldBody');
+  tb.innerHTML=data.length===0?`<tr><td colspan="6" class="empty">No topics match filters</td></tr>`:
+    data.map((x,i)=>`<tr>
+      <td style="color:var(--t3);font-size:10px">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="t-row"><span class="t-ico">${x.ico}</span><div><div class="t-name">${x.name}</div></div></div></td>
+      <td>${impBadge(x.imp)}</td>
+      <td>${ssHtml(x.id)}</td>
+      <td style="font-size:11px;color:var(--t2);max-width:220px;line-height:1.55">${x.desc}</td>
+      <td>${lchips(x.id,x.links)}</td>
+    </tr>`).join('');
 }
+function filterLLD(v){lldSrch=v;renderLLD();}
+function flImp(v,btn){lldImpF=v;document.querySelectorAll('#tab-lld .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderLLD();}
 
-function filterByType(type, btn) {
-  currentFilterType = type;
-  const typeBtns = ['HLD+LLD','HLD Only','LLD Only'];
-  document.querySelectorAll('#tab-topics .filter-bar .filter-btn').forEach(b => {
-    if (typeBtns.includes(b.textContent.trim())) b.classList.remove('active');
+// ═══════════════════════════════════════════════
+// PATTERNS
+// ═══════════════════════════════════════════════
+const catBadge={Creational:'b-cr',Structural:'b-st',Behavioural:'b-bh',Fundamentals:'b-fund'};
+function renderPatterns(){
+  const data=PATTERNS.filter(x=>{
+    if(patCatF!=='all'&&x.cat!==patCatF)return false;
+    if(patSrch&&!x.name.toLowerCase().includes(patSrch.toLowerCase())&&!x.idea.toLowerCase().includes(patSrch.toLowerCase()))return false;
+    return true;
   });
-  btn.classList.add('active');
-  renderTopicsTable();
+  const tb=document.getElementById('patBody');
+  tb.innerHTML=data.length===0?`<tr><td colspan="7" class="empty">No patterns match</td></tr>`:
+    data.map((x,i)=>`<tr>
+      <td style="color:var(--t3);font-size:10px">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="t-row"><span class="t-ico">${x.ico}</span><div class="t-name">${x.name}</div></div></td>
+      <td><span class="badge ${catBadge[x.cat]||'b-fund'}">${x.cat}</span></td>
+      <td>${impBadge(x.imp)}</td>
+      <td>${ssHtml(x.id)}</td>
+      <td style="font-size:11px;color:var(--t2);line-height:1.55;max-width:280px">${x.idea}</td>
+      <td><div class="lchips">${x.links.map(l=>`<a class="lchip" href="${l.u}" target="_blank" rel="noopener">↗ ${l.t}</a>`).join('')}</div></td>
+    </tr>`).join('');
 }
+function filterPat(v){patSrch=v;renderPatterns();}
+function fpCat(v,btn){patCatF=v;document.querySelectorAll('#tab-patterns .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPatterns();}
 
-// ===================== ADD LINK =====================
-function openAddLink(topicId) {
-  addLinkTarget = topicId;
-  const topic = topicsData.find(t => t.id === topicId);
-  document.getElementById('modalTopicName').textContent = topic.icon + '  ' + topic.name;
-  document.getElementById('linkTitle').value = '';
-  document.getElementById('linkUrl').value = '';
-  document.getElementById('addLinkModal').classList.add('open');
-  setTimeout(() => document.getElementById('linkTitle').focus(), 100);
+// ═══════════════════════════════════════════════
+// PRACTICE
+// ═══════════════════════════════════════════════
+const diffCls={Beginner:'diff-b',Intermediate:'diff-i',Advanced:'diff-a'};
+const typeCls={HLD:'b-hld',LLD:'b-lld'};
+function renderPractice(){
+  const data=PRACTICE.filter(x=>{
+    if(pracDiffF!=='all'&&x.diff!==pracDiffF)return false;
+    if(pracTypeF!=='all'&&x.t!==pracTypeF)return false;
+    if(pracSrch&&!x.name.toLowerCase().includes(pracSrch.toLowerCase())&&!x.concepts.toLowerCase().includes(pracSrch.toLowerCase()))return false;
+    return true;
+  });
+  const tb=document.getElementById('pracBody');
+  tb.innerHTML=data.length===0?`<tr><td colspan="7" class="empty">No problems match</td></tr>`:
+    data.map((x,i)=>`<tr>
+      <td style="color:var(--t3);font-size:10px">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="t-row"><span class="t-ico">${x.ico}</span><div class="t-name">${x.name}</div></div></td>
+      <td><span class="badge ${typeCls[x.t]}">${x.t}</span></td>
+      <td><span class="badge ${diffCls[x.diff]}">${x.diff}</span></td>
+      <td>${ssHtml(x.id)}</td>
+      <td style="font-size:11px;color:var(--t2);line-height:1.55;max-width:250px">${x.concepts}</td>
+      <td><div class="lchips">${x.links.map(l=>`<a class="lchip" href="${l.u}" target="_blank" rel="noopener">↗ ${l.t}</a>`).join('')}</div></td>
+    </tr>`).join('');
 }
+function filterPrac(v){pracSrch=v;renderPractice();}
+function fpDiff(v,btn){pracDiffF=v;document.querySelectorAll('#tab-practice .fbtn').slice(0,4).forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPractice();}
+function fpType(v,btn){pracTypeF=v;document.querySelectorAll('#tab-practice .fbtn').slice(4).forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPractice();}
 
-function closeModal() {
-  document.getElementById('addLinkModal').classList.remove('open');
-  addLinkTarget = null;
+// ═══════════════════════════════════════════════
+// RESOURCES
+// ═══════════════════════════════════════════════
+function renderResources(){
+  const data=RESOURCES.filter(x=>{
+    if(resCatF!=='all'&&x.t!==resCatF)return false;
+    if(resSrch&&!x.title.toLowerCase().includes(resSrch.toLowerCase())&&!x.desc.toLowerCase().includes(resSrch.toLowerCase())&&!x.author.toLowerCase().includes(resSrch.toLowerCase()))return false;
+    return true;
+  });
+  const grid=document.getElementById('resGrid');
+  grid.innerHTML=data.length===0?`<div class="empty" style="grid-column:1/-1">No resources match</div>`:
+    data.map(x=>`
+      <div class="res-card">
+        <div class="rc-top">
+          <div>
+            <div class="rc-title">${x.ico} ${x.title}</div>
+            <div class="rc-author">${x.author}</div>
+          </div>
+          <span class="${x.free?'rc-free':'rc-paid'}">${x.free?'FREE':'PAID'}</span>
+        </div>
+        <div class="rc-desc">${x.desc}</div>
+        <div class="rc-footer">
+          <div class="rc-tags">${x.tags.map(t=>`<span class="ctag">${t}</span>`).join('')}</div>
+          <a class="rc-link" href="${x.url}" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>`).join('');
 }
+function filterRes(v){resSrch=v;renderResources();}
+function frCat(v,btn){resCatF=v;document.querySelectorAll('#tab-resources .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderResources();}
 
-function saveLink() {
-  const title = document.getElementById('linkTitle').value.trim();
-  const url = document.getElementById('linkUrl').value.trim();
-  if (!title || !url) return;
+// ═══════════════════════════════════════════════
+// QUESTIONS
+// ═══════════════════════════════════════════════
+function renderQuestions(){
+  const data=QUESTIONS.filter(x=>{
+    if(qTypeF!=='all'&&x.t!==qTypeF)return false;
+    if(qSrch&&!x.q.toLowerCase().includes(qSrch.toLowerCase())&&!x.topic.toLowerCase().includes(qSrch.toLowerCase()))return false;
+    return true;
+  });
+  const grid=document.getElementById('qGrid');
+  grid.innerHTML=data.length===0?`<div class="empty" style="grid-column:1/-1">No questions match</div>`:
+    data.map((x,i)=>`
+      <div class="qcard">
+        <div class="qcard-top">
+          <span class="qnum">Q${String(i+1).padStart(2,'0')}</span>
+          <span class="qtext">${x.q}</span>
+          <div class="fdots">${[1,2,3,4,5].map(n=>`<div class="fd ${n<=x.freq?'on':''}"></div>`).join('')}</div>
+        </div>
+        <div class="qmeta">
+          <span class="qtag qt-topic">${x.t} · ${x.topic}</span>
+          ${x.cos.map(c=>`<span class="qtag qt-co">${c}</span>`).join('')}
+        </div>
+        <button class="toggle-h" onclick="toggleHint(this)">▶ Show approach</button>
+        <div class="hint-box">${x.hint}</div>
+      </div>`).join('');
+}
+function filterQ(v){qSrch=v;renderQuestions();}
+function fqType(v,btn){qTypeF=v;document.querySelectorAll('#tab-questions .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQuestions();}
+function toggleHint(btn){const b=btn.nextElementSibling;b.classList.toggle('open');btn.textContent=b.classList.contains('open')?'▼ Hide approach':'▶ Show approach';}
 
-  if (!customLinks[addLinkTarget]) customLinks[addLinkTarget] = [];
-  customLinks[addLinkTarget].push({ title, url });
+// ═══════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════
+function openModal(id){
+  linkTarget=id;
+  const all=[...HLD_TOPICS,...LLD_TOPICS,...PATTERNS,...PRACTICE];
+  const topic=all.find(x=>x.id===id);
+  document.getElementById('modalTopic').textContent=topic?(topic.ico||'')+'  '+(topic.name||topic.t||id):id;
+  document.getElementById('lTitle').value='';
+  document.getElementById('lUrl').value='';
+  document.getElementById('linkModal').classList.add('open');
+  setTimeout(()=>document.getElementById('lTitle').focus(),100);
+}
+function closeModal(){document.getElementById('linkModal').classList.remove('open');linkTarget=null;}
+function saveLink(){
+  const t=document.getElementById('lTitle').value.trim();
+  const u=document.getElementById('lUrl').value.trim();
+  if(!t||!u)return;
+  if(!customLinks[linkTarget])customLinks[linkTarget]=[];
+  customLinks[linkTarget].push({t,u});
   saveState();
   closeModal();
-  renderTopicsTable();
+  const tab=document.querySelector('.tab.active').dataset.tab;
+  if(tab==='hld')renderHLD();
+  if(tab==='lld')renderLLD();
+  if(tab==='practice')renderPractice();
 }
 
-// ===================== FREQUENCY TAB =====================
-function renderFrequency() {
-  const grid = document.getElementById('freqGrid');
-  grid.innerHTML = '';
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.getElementById('linkModal').addEventListener('click',e=>{if(e.target===document.getElementById('linkModal'))closeModal();});
+document.getElementById('lUrl').addEventListener('keydown',e=>{if(e.key==='Enter')saveLink();});
 
-  const sorted = [...topicsData].sort((a, b) => {
-    const order = { critical:0, high:1, medium:2, low:3 };
-    return order[a.importance] - order[b.importance];
-  });
-
-  sorted.forEach(topic => {
-    const pctMap = { critical:95, high:78, medium:55, low:30 };
-    const pct = pctMap[topic.importance];
-    const colorMap = { critical:'fill-critical', high:'fill-high', medium:'fill-medium', low:'fill-low' };
-    const labelMap = { critical:'Must Know', high:'Very Common', medium:'Common', low:'Occasional' };
-
-    const card = document.createElement('div');
-    card.className = 'freq-card';
-    card.innerHTML = `
-      <div class="freq-card-name">${topic.icon} ${topic.name}</div>
-      <div class="freq-card-type">${topic.type} · ${labelMap[topic.importance]}</div>
-      <div class="freq-meter">
-        <span class="freq-meter-label">Ask freq.</span>
-        <div class="freq-meter-bar">
-          <div class="freq-meter-fill ${colorMap[topic.importance]}" style="width:${pct}%"></div>
-        </div>
-        <span class="freq-pct" style="color:${pct>75?'var(--red)':pct>55?'var(--amber)':'var(--green2)'}">${pct}%</span>
-      </div>
-      <div class="freq-companies-label">Asked at:</div>
-      <div class="companies">${topic.companies.map(c => `<span class="company-tag">${c}</span>`).join('')}</div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-// ===================== QUESTIONS TAB =====================
-function renderQuestions() {
-  let filtered = interviewQuestions.filter(q => {
-    const typeMatch = currentQType === 'all' || q.type === currentQType;
-    const searchMatch = !currentQSearch || q.text.toLowerCase().includes(currentQSearch.toLowerCase()) || q.topic.toLowerCase().includes(currentQSearch.toLowerCase());
-    return typeMatch && searchMatch;
-  });
-
-  const grid = document.getElementById('questionsGrid');
-  grid.innerHTML = '';
-
-  filtered.forEach((q, idx) => {
-    const freqDots = [1,2,3,4,5].map(i =>
-      `<div class="freq-dot ${i <= q.freq ? 'on' : ''}"></div>`
-    ).join('');
-
-    const card = document.createElement('div');
-    card.className = 'question-card';
-    card.innerHTML = `
-      <div class="question-card-header">
-        <span class="question-num">Q${String(idx+1).padStart(3,'0')}</span>
-        <span class="question-text">${q.text}</span>
-        <div class="question-freq" title="Frequency: ${q.freq}/5">${freqDots}</div>
-      </div>
-      <div class="question-meta">
-        <span class="q-tag q-tag-topic">${q.type} · ${q.topic}</span>
-        ${q.companies.map(c => `<span class="q-tag q-tag-company">${c}</span>`).join('')}
-      </div>
-      <button class="toggle-answer" onclick="toggleAnswer(this)">▶ Show hint</button>
-      <div class="answer-box">${getHint(q.id)}</div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function toggleAnswer(btn) {
-  const box = btn.nextElementSibling;
-  box.classList.toggle('open');
-  btn.textContent = box.classList.contains('open') ? '▼ Hide hint' : '▶ Show hint';
-}
-
-function filterQByType(type, btn) {
-  currentQType = type;
-  document.querySelectorAll('#tab-questions .filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderQuestions();
-}
-
-function filterQuestions(val) {
-  currentQSearch = val;
-  renderQuestions();
-}
-
-function getHint(id) {
-  const hints = {
-    1: "Key ideas: Base62 encoding, hash function collision handling. Use a KV store (Redis) for redirect. Short code → long URL mapping. Consider expiry, analytics, custom aliases. Estimate ~100:1 read:write ratio.",
-    2: "Fanout on write (push) vs fanout on read (pull). Use a separate timeline cache per user. Handle celebrities with hybrid approach — read heavy timelines pull from a celebrity feed cache. Redis sorted sets for timeline.",
-    3: "Write-through vs write-back vs write-around cache. LRU/LFU eviction. Use consistent hashing for distributed cache nodes. Cache stampede: use mutex locks or probabilistic early expiration.",
-    4: "WebSockets for real-time. Use last-seen timestamp for offline delivery. Messages stored in Cassandra (write-heavy). Use message queue for async delivery. End-to-end encryption with Signal Protocol.",
-    5: "Chunk video into segments (HLS/DASH). CDN for edge delivery. Adaptive bitrate streaming. Use S3 for storage, transcoding workers. Client chooses quality based on bandwidth.",
-    6: "Token bucket: tokens added at constant rate, consumed per request. Sliding window: count requests in rolling time window. Redis + Lua script for atomic check-and-set. Return 429 when exceeded.",
-    7: "Geospatial indexing using S2 cells or geohash. WebSockets for real-time driver location updates. Matching algorithm: find k nearest drivers, rank by ETA. Use Kafka for location event stream.",
-    8: "Fan-out service with priority queues. Device token registry. Platform-specific gateways (APNs, FCM). Retry with exponential backoff. Separate high-priority (OTP) from low-priority (marketing).",
-    9: "Place servers on a hash ring. Each server owns a segment. Virtual nodes for even distribution. On server add/remove, only adjacent segment migrated. Used in DynamoDB, Cassandra, Redis Cluster.",
-    10: "Producers write to partitions. Consumers in groups read from partitions. Ordered within partition, not across. Retention period. Kafka vs SQS: Kafka is pull-based, replays events; SQS deletes after consume.",
-    11: "Trie for prefix matching. Cache top-k suggestions per prefix. Use DFS with pruning. Filter by recency, popularity. Redis sorted sets per prefix. Debounce on client side.",
-    12: "Idempotency key per payment request. Ledger as append-only log. Two-phase commit for distributed transactions. Use saga pattern for rollbacks. PCI-DSS compliance considerations.",
-    13: "C: all nodes see same data. A: every request gets a response. P: system works despite network partition. Partition always possible → choose C or A. CP: MongoDB. AP: Cassandra. CA: single-node.",
-    14: "Hash-based: even distribution, hard to range query. Range-based: natural ordering, can have hot spots. Consistent hashing for rebalancing. Cross-shard transactions need 2PC or saga.",
-    15: "Operational Transformation (OT) or CRDT for conflict resolution. Each operation is transformed against concurrent ops. Vector clocks for causality. WebSockets + operational log broadcast.",
-    16: "HashMap<key, Node> + Doubly LinkedList. get: O(1) lookup, move to front. put: O(1) insert at front, evict tail if full. Thread-safe: ReentrantLock or ConcurrentHashMap.",
-    17: "Classes: ParkingLot, Floor, ParkingSpot (Compact/Large/Handicapped), Vehicle, Ticket, PricingStrategy. State: spot.isFree(). Singleton ParkingLot. Strategy pattern for pricing.",
-    18: "S: one reason to change. O: open for extension, closed for modification. L: subclass usable as base class. I: no fat interfaces. D: depend on abstractions not concretions. Demo with PaymentProcessor example.",
-    19: "LOOK/SCAN algorithm: serve requests in current direction, reverse at end. Classes: Elevator, ElevatorController, Request, Floor. State machine: IDLE/UP/DOWN/MAINTENANCE. Min-heap for request scheduling.",
-    20: "States: IDLE, HAS_MONEY, DISPENSE, OUT_OF_STOCK. Transitions driven by coin insert, select product, dispense. Use State pattern. Classes: VendingMachine, Coin, Product, Inventory.",
-    21: "Graph of debts between users. Greedy simplification: net out debts, match creditors/debtors. Classes: User, Group, Expense, Split (Equal/Exact/Percentage), Balance. Use Heap for O(n log n) simplification.",
-    22: "Subject maintains observer list. notify() calls update() on all observers. Decouples producer and consumer. vs Message Queue: queue is async, durable, distributed. Observer is in-process, synchronous.",
-    23: "Classes: Board, Square, Piece (King/Queen/Rook/Bishop/Knight/Pawn), Player, Move, Game. Piece.isValidMove() polymorphism. Check detection: after move, is king in attack path? Checkmate: no valid moves.",
-    24: "Thread: lightweight, shared memory. Process: isolated. Race conditions → use locks (synchronized, ReentrantLock). Deadlock avoidance: lock ordering, tryLock with timeout. ThreadLocal for request context.",
-    25: "Optimistic locking: version field, fail if version mismatch. Pessimistic: SELECT FOR UPDATE. Two-phase: hold seat in PENDING for 10 min. Use distributed lock (Redis SETNX) for high-concurrency seat holds.",
-  };
-  return hints[id] || "Key concepts: Identify requirements → estimate scale → component design → data model → API → identify bottlenecks → iterate.";
-}
-
-// ===================== KEYBOARD SHORTCUTS =====================
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
-
-document.getElementById('addLinkModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('addLinkModal')) closeModal();
-});
-
-// Enter to save
-document.getElementById('linkUrl').addEventListener('keydown', e => {
-  if (e.key === 'Enter') saveLink();
-});
-
-// ===================== INIT =====================
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
 loadState();
-renderTopicsTable();
 updateStats();
+renderRoadmap();
 </script>
 </body>
 </html>
