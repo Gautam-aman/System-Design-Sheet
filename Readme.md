@@ -211,24 +211,6 @@ open system-design-tracker.html        # macOS
 start system-design-tracker.html       # Windows
 xdg-open system-design-tracker.html   # Linux
 ```
-
-Or deploy your own:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/sysdesign-track)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/YOUR_USERNAME/sysdesign-track)
-
----
-
-## 📁 File Structure
-
-```
-sysdesign-track/
-├── system-design-tracker.html   # Entire app — HTML + CSS + JS in one file
-└── README.md
-```
-
-> No `npm install`. No build step. No backend. No login. Just one file.
-
 ---
 
 ## 🗺️ Suggested Learning Path
